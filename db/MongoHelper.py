@@ -14,13 +14,13 @@ class MongoHelper(object):
     def insert_post_mary(self, posts):
         self.collection.insert_many(posts)
 
-    def delete_post_by_id(self, id):
-        self.collection.delete_one({'id': id})
+    def delete_post_by_item_id(self, item_id):
+        self.collection.delete_one({'itemid': item_id})
 
     def delete_post(self, post):
         self.collection.delete_one(post)
 
-    def find_post_by_id(self, id):
-        document = self.collection.find_one({'id': id})
+    def find_post_by_item_id(self, item_id):
+        document = self.collection.find_one({'itemid': item_id})
         return document
 
