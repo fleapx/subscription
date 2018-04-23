@@ -37,6 +37,9 @@ class EmailTool(object):
                  'a:visited{' \
                  'text-decoration: none;' \
                  'color: #598abf;}' \
+                 'img{'\
+                 'width: 16px;'\
+                 'height: 16px;}'\
                  '.headerimg{' \
                  'border-radius: 50%%;' \
                  'display: block;' \
@@ -70,12 +73,11 @@ class EmailTool(object):
                  'margin:0;}' \
                  '.articleimgli{' \
                  'float: left;' \
-                 'width: 25%%;' \
-                 'height: calc(height);' \
+                 'width: 30%;' \
                  'margin: 5px;}' \
                  '.articleimgimg{' \
-                 'width: 100%%;' \
-                 'height: 100%%;}' \
+                 'width: 100%!important;' \
+                 'height: 130px!important;}' \
                  '</style>' \
                  '<script type="text/javascript">' \
                  'function gotoweibo1(url){' \
@@ -137,18 +139,21 @@ class EmailTool(object):
                         retweeted_status_lis = retweeted_status_lis + retweeted_status_li
 
                 # 拼接后的完整被转发的微博
-                retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" onclick="gotoweibo2(\'%s\')">'\
-				                        '<div class="articletext"><p class="articletextp"><a href="%s">%s</a>:%s</p></div><div class="articleimg">'\
+                retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" >'\
+				                        '<div class="articletext"><p class="articletextp"><a href="%s">' \
+                                        '%s</a>:<a href="%s" style="color: #000;text-decoration:none">%s' \
+                                        '</a></p></div><div class="articleimg">'\
 					                    '<ul class="articleimgul">%s</ul></div><div style="clear: both;"></div></div>'\
-                                        % (retweeted_scheme, retweeted_profile_url, retweeted_screen_name,
+                                        % (retweeted_profile_url, retweeted_screen_name, retweeted_scheme,
                                            retweeted_status_text, retweeted_status_lis)
 
             card_html = '<div style="background-color: #fff;margin: 10px auto;width: 95%%; padding: 10px;max-width: 500px">'\
 		                '<div><div style="float: left;"><img class="headerimg" src="%s" alt="头像"></div>'\
 			            '<div style="float: left; margin-left: 10px"><div class="headertitle"><a href="%s" style="color: #000!important">'\
 						'<span class="headertitlespan">%s</span></a></div><div class="headerinfo"><span class="headerinfospan">%s</span></div>'\
-			            '</div><div style="clear: both;"></div></div><div style="margin: 5px"><div style="padding: 5px 5px;cursor: pointer;" onclick="gotoweibo1(\'%s\')">'\
-				        '<div class="articletext"><p class="articletextp">%s</p></div><div class="articleimg"><ul class="articleimgul">%s</ul>'\
+			            '</div><div style="clear: both;"></div></div><div style="margin: 5px"><div style="padding: 5px 5px;cursor: pointer;"'\
+				        '<div class="articletext"><p class="articletextp"><a href="%s" style="color: #000;text-decoration: none">%s</a></p></div>' \
+                        '<div class="articleimg"><ul class="articleimgul">%s</ul>'\
 				        '</div><div style="clear: both;"></div></div>%s</div></div>'\
                         % (profile_image_url, profile__url, screen_name, user_info, scheme, text, lis,
                            retweeted_status_html)
