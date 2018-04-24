@@ -13,7 +13,12 @@ class EmailTool(object):
     # type 为0返回微博数据，需要格式化 1为异常信息，直接返回
     def sendMSG(self, subject, context, type):
         if type is 0:
-            context = self.format_post(context)
+            try:
+                context = self.format_post(context)
+            except Exception as e:
+                logging.error('格式化数据失败，错误信息：%s' % str(e))
+                subject = '错误警告'
+                context = '格式化数据失败，错误信息：%s' % str(e)
 
         msg = MIMEText(context, _subtype='html', _charset='utf-8')
         msg['Subject'] = subject

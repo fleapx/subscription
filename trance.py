@@ -30,11 +30,10 @@ def start():
             time.sleep(config.SPIDER_INTERVAL)
             response_text = weiboSpider.get_response(page_num, uid)
             response_json = json.loads(response_text)
-            logging.debug("获取的response:%s" % response_text)
 
             if response_json['ok'] is not 1:
-                logging.error('获取微博数据失败')
-                emailTool.sendMSG('异常警告', '获取微博数据失败，请检查相关设置', 1)
+                logging.error('获取微博数据失败，返回的response：%s' % response_text)
+                emailTool.sendMSG('异常警告', '获取微博数据失败，返回的response：%s' % response_text, 1)
                 sys.exit()
             # 迭代微博列表
             data = response_json['data']
@@ -89,7 +88,7 @@ while True:
         result = start()
     except Exception as e:
         logging.error('获取微博数据失败:%s' % str(e))
-        emailTool.sendMSG('异常警告', '获取微博数据失败，请检查相关设置:%s' % str(e), 1)
+        emailTool.sendMSG('异常警告', '获取微博数据失败，异常信息:%s' % str(e), 1)
         sys.exit()
     if len(result) is not 0:
         # 发送邮件
