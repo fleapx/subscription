@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 import config
 import logging
+import time
 
 
 class EmailTool(object):
@@ -94,8 +95,11 @@ class EmailTool(object):
             # 昵称
             screen_name = post.get('mblog', None).get('user', None).get('screen_name', None)
             # 日期和手机来源
-            user_info = "%s %s" % (
-                post.get('mblog', None).get('created_at', None), post.get('mblog', None).get('source', None))
+            # 转换成localtime
+            time_local = time.localtime(int(post.get('mblog', None).get('created_at', None)))
+            # 转换成新的时间格式(2016-05-05 20:28)
+            dt = time.strftime("%Y-%m-%d %H:%M", time_local)
+            user_info = "%s %s" % (dt, post.get('mblog', None).get('source', None))
             # 微博链接
             scheme = post.get('scheme', None)
             # 微博原文

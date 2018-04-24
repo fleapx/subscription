@@ -49,6 +49,9 @@ def start():
                         current_count = current_count + 1
                         # 若当前个数不超过最大个数，添加到结果列表
                         if current_count <= max_count:
+                            # 将微博创建时间改为当前时间戳(秒)
+                            mblog = card['mblog']
+                            mblog['created_at'] = int(time.time())
                             result.append(card)
                             logging.debug("添加到返回结果：%s" % card)
                     else:
