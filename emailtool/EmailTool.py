@@ -71,21 +71,21 @@ class EmailTool(object):
                  '.articleimgul{' \
                  'list-style: none;' \
                  'height: auto;' \
-                 'margin:0;}' \
+                 'margin:0;' \
+                 'padding: 0;}' \
                  '.articleimgli{' \
                  'float: left;' \
                  'width: 30%;' \
-                 'margin: 5px;}' \
+                 'margin: 5px;' \
+                 'height: 0;'\
+	             'padding-bottom: 30%;'\
+	             'position: relative;}' \
                  '.articleimgimg{' \
                  'width: 100%!important;' \
-                 'height: 130px!important;}' \
+                 'height: 100%!important;' \
+                 'position: absolute;'\
+		         'display: block;}' \
                  '</style>' \
-                 '<script type="text/javascript">' \
-                 'function gotoweibo1(url){' \
-                 'window.location.href=url;}' \
-                 'function gotoweibo2(url){' \
-                 'window.location.href=url;}' \
-                 '</script>' \
                  '<body style="background-color: #efefef;">'
         for post in post_list:
             # 头像
@@ -104,14 +104,21 @@ class EmailTool(object):
             scheme = post.get('scheme', None)
             # 微博原文
             text = post.get('mblog', None).get('text', None)
-            # 图片li
+            # 图片
             pics = post.get('mblog', None).get('pics', None)
             lis = ''
-            if (pics is not None) and (len(pics) is not 0):
+            # 存在多张图片
+            if (pics is not None) and (len(pics) > 1):
+                lis = '<ul class="articleimgul">'
                 for pic in pics:
-                    li = '<li class="articleimgli"><img class="articleimgimg" src="%s" alt="img"></li>' % pic.get('url',
-                                                                                                                  None)
+                    li = '<li class="articleimgli"><img class="articleimgimg" src="%s" alt="img"></li>' \
+                         % pic.get('url', None)
                     lis = lis + li
+                lis = lis + '</ul>'
+            # 只有一张图片
+            elif (pics is not None) and (len(pics) is 1):
+                lis = '<img class="articleimgimg" src="%s" style="position: relative!important;' \
+                      'width: 90%%!important;margin:5px">' % pics[0].get('url', None)
 
             # 转发微博
             retweeted_status = post.get('mblog', None).get('retweeted_status', None)
@@ -133,21 +140,28 @@ class EmailTool(object):
 
                 # 被转发微博正文
                 retweeted_status_text = retweeted_status.get('text', None)
-                # 图片li
+                # 图片
                 retweeted_status_pics = retweeted_status.get('pics', None)
                 retweeted_status_lis = ''
-                if (retweeted_status_pics is not None) and (len(retweeted_status_pics) is not 0):
+                # 存在多张图片
+                if (retweeted_status_pics is not None) and (len(retweeted_status_pics) > 1):
+                    retweeted_status_lis = '<ul class="articleimgul">'
                     for retweeted_status_pic in retweeted_status_pics:
-                        retweeted_status_li = '<li class="articleimgli"><img class="articleimgimg" src="%s" alt="img"></li>' % retweeted_status_pic.get(
-                            'url', None)
+                        retweeted_status_li = '<li class="articleimgli"><img class="articleimgimg" src="%s" alt="img"></li>' \
+                                              % retweeted_status_pic.get('url', None)
                         retweeted_status_lis = retweeted_status_lis + retweeted_status_li
+                    retweeted_status_lis = retweeted_status_lis + '</ul>'
+                # 只有一张图片
+                elif (pics is not None) and (len(pics) is 1):
+                    retweeted_status_lis = '<img class="articleimgimg" src="%s" style="position: relative!important;' \
+                                           'width: 90%%!important;margin:5px">' % pics[0].get('url', None)
 
                 # 拼接后的完整被转发的微博
                 retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" >' \
                                         '<div class="articletext"><p class="articletextp"><a href="%s">' \
                                         '%s</a>:<a href="%s" style="color: #000;text-decoration:none">%s' \
                                         '</a></p></div><div class="articleimg">' \
-                                        '<ul class="articleimgul">%s</ul></div><div style="clear: both;"></div></div>' \
+                                        '%s</div><div style="clear: both;"></div></div>' \
                                         % (retweeted_profile_url, retweeted_screen_name, retweeted_scheme,
                                            retweeted_status_text, retweeted_status_lis)
 
@@ -157,7 +171,7 @@ class EmailTool(object):
                         '<span class="headertitlespan">%s</span></a></div><div class="headerinfo"><span class="headerinfospan">%s</span></div>' \
                         '</div><div style="clear: both;"></div></div><div style="margin: 5px"><div style="padding: 5px 5px;cursor: pointer;"' \
                         '<div class="articletext"><p class="articletextp"><a href="%s" style="color: #000;text-decoration: none">%s</a></p></div>' \
-                        '<div class="articleimg"><ul class="articleimgul">%s</ul>' \
+                        '<div class="articleimg">%s' \
                         '</div><div style="clear: both;"></div></div>%s</div></div>' \
                         % (profile_image_url, profile__url, screen_name, user_info, scheme, text, lis,
                            retweeted_status_html)

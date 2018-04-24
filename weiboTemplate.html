@@ -55,25 +55,23 @@
 		list-style: none;
 		height: auto;
 		margin:0;
+		padding: 0;
 	}
 	.articleimgli{
 		float: left;
 		width: 30%;
 		margin: 5px;
+	    height: 0;
+	    padding-bottom: 30%;
+	    position: relative;
 	}
 	.articleimgimg{
+		position: absolute;
+		display: block;
 		width: 100%!important;
 		height: 100%!important;
 	}
 </style>
-<script type="text/javascript">
-	function gotoweibo1(url){
-		window.location.href=url;
-	}
-	function gotoweibo2(url){
-		window.location.href=url;
-	}
-</script>
 <body style="background-color: #efefef;">
 	<!-- 一个card -->
 	<div style="background-color: #fff;margin: 10px auto;width: 95%; padding: 10px;max-width: 500px">
@@ -115,10 +113,8 @@
 				<!-- 转发微博 -->
 				<div class="articletext"><p class="articletextp"><a href="https://m.weibo.cn/u/1280846847?uid=1280846847&luicode=10000011&lfid=1076031662766362&featurecode=20000320">@沈阳晚报</a>:<a href="aaa" style="color: #000;text-decoration: none">【儿媳不满婆婆参加蜜月旅行还指指点点 回国就离婚】阳阳和小军婚后去欧洲度蜜月，因婆婆不放心，于是一同前往。阳阳购物多了，婆婆很不高兴，小军也总是站在母亲一边，但“我婆婆买的也不少，更可气的是，我丈夫这种时候，总帮他妈拿东西，把我扔在后面”。阳阳认为丈夫是个妈宝男，蜜月还没度完，就 ​​​...<a href="/status/4231904083214659">全文</a></a></p></div>
 				<div>
-					<ul class="articleimgul">
-						<li class="articleimgli">
-							<img class="articleimgimg" src="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg"></li>
-					</ul>
+					<!-- 单一图片显示方式 -->
+					<img class="articleimgimg" src="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg" style="position: relative!important;width: 90%!important;margin:5px">
 				</div>
 				<div style="clear: both;"></div>
 			</div>
