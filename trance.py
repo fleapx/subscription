@@ -6,6 +6,7 @@ import json
 import logging
 import time
 import sys
+import re
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -49,9 +50,19 @@ def start():
                         current_count = current_count + 1
                         # 若当前个数不超过最大个数，添加到结果列表
                         if current_count <= max_count:
+
                             # 将微博创建时间改为当前时间戳(秒)
                             mblog = card['mblog']
                             mblog['created_at'] = int(time.time())
+
+                            # 加载微博原文
+                            mblog['text'] = get_full_text(mblog['text'])
+
+                            # 加载转发微博原文
+                            retweed_status = mblog.get('retweeted_status', None)
+                            if retweed_status is not None:
+                                retweed_status['text'] = get_full_text(retweed_status['text'])
+
                             result.append(card)
                             logging.debug("添加到返回结果：%s" % card)
                     else:
@@ -61,13 +72,24 @@ def start():
             page_num = page_num + 1
     return result
 
+# 获取微博全文
+def get_full_text(text):
+    # 通过正则表达式判断是否包含全文链接
+    urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', text)
+    if len(urls) is 1:
+        # 加载全文
+        full_text_url = 'https://m.weibo.cn%s' % urls[0]
+        text = weiboSpider.get_weibo_full_text(full_text_url)
+    return text
+
+
 
 while True:
     try:
         result = start()
-    except:
-        logging.error('获取微博数据失败')
-        emailTool.sendMSG('异常警告', '获取微博数据失败，请检查相关设置', 1)
+    except Exception as e:
+        logging.error('获取微博数据失败:%s' % str(e))
+        emailTool.sendMSG('异常警告', '获取微博数据失败，请检查相关设置:%s' % str(e), 1)
         sys.exit()
     if len(result) is not 0:
         # 发送邮件

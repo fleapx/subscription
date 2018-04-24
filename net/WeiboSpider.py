@@ -1,5 +1,6 @@
 import requests
 import config
+import re
 
 
 class WeiboSpider(object):
@@ -10,3 +11,12 @@ class WeiboSpider(object):
         headers = {'cookie': config.SPIDER_COOKIE, 'user-agent': config.SPIDER_USER_AGENT}
         response = requests.get(url, headers=headers)
         return response.text
+
+    def get_weibo_full_text(self, url):
+        headers = {'cookie': config.SPIDER_COOKIE, 'user-agent': config.SPIDER_USER_AGENT}
+        response = requests.get(url, headers=headers)
+        # 页面源码
+        html_text = response.text
+        # 根据正则表达式获取微博正文
+        text = re.findall('.*"text": "(.+)",.*', html_text)[0]
+        return text

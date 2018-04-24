@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 import config
 import logging
 import time
+import re
 
 
 class EmailTool(object):
@@ -102,8 +103,8 @@ class EmailTool(object):
             user_info = "%s %s" % (dt, post.get('mblog', None).get('source', None))
             # 微博链接
             scheme = post.get('scheme', None)
-            # 微博原文
-            text = post.get('mblog', None).get('text', None)
+            # 微博原文（将a标签全部替换为span）
+            text = self.replace_a_to_span(post.get('mblog', None).get('text', None))
             # 图片
             pics = post.get('mblog', None).get('pics', None)
             lis = ''
@@ -138,8 +139,8 @@ class EmailTool(object):
                     # 被转发用户昵称
                     retweeted_screen_name = ''
 
-                # 被转发微博正文
-                retweeted_status_text = retweeted_status.get('text', None)
+                # 被转发微博正文(将a标签全部替换为span）
+                retweeted_status_text = self.replace_a_to_span(retweeted_status.get('text', None))
                 # 图片
                 retweeted_status_pics = retweeted_status.get('pics', None)
                 retweeted_status_lis = ''
@@ -179,3 +180,9 @@ class EmailTool(object):
 
         result = result + '</body></html>'
         return result
+
+    def replace_a_to_span(self, text):
+        span = '<span style="color: #598abf;">'
+        text = re.sub('<a href.+?>', span, text)
+        text = re.sub('</a>', '</span>', text)
+        return text
