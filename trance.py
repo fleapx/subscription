@@ -76,18 +76,20 @@ def get_full_text(text):
     return text
 
 
-
 while True:
     try:
         result = start()
+        logging.debug('获取到了 %s 条新微博' % len(result))
     except Exception as e:
         logging.error('获取微博数据失败，异常信息：%s' % str(e))
         emailTool.sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), 1)
         sys.exit()
+
     if len(result) is not 0:
         # 发送邮件
         emailTool.sendMSG('您关注的微博有更新啦', result, 0)
         # 保存到数据库
         mongoHelper.insert_post_mary(result)
+
     logging.debug('休眠，等待下次查询')
     time.sleep(config.SPIDER_TRANCE_INTERVAL)

@@ -117,14 +117,24 @@ class EmailTool(object):
             if (pics is not None) and (len(pics) > 1):
                 lis = '<ul class="articleimgul">'
                 for pic in pics:
+                    if pic.get('large', None) is None:
+                        pic_url = pic.get('url', None)
+                    else:
+                        pic_url = pic.get('large', None).get('url', None)
+
                     li = '<li class="articleimgli"><a href="%s"><img class="articleimgimg" src="%s" alt="img"></a></li>' \
-                         % (pic.get('url', None), pic.get('url', None))
+                         % (pic_url, pic_url)
                     lis = lis + li
                 lis = lis + '</ul>'
             # 只有一张图片
             elif (pics is not None) and (len(pics) is 1):
+                if pics[0].get('large', None) is None:
+                    pic_url = pics[0].get('url', None)
+                else:
+                    pic_url = pics[0].get('large', None).get('url', None)
+
                 lis = '<a href="%s"><img class="articleimgimg" src="%s" style="position: relative!important;' \
-                      'width: 90%%!important;margin:5px"></a>' % (pics[0].get('url', None), pics[0].get('url', None))
+                      'width: 90%%!important;margin:5px"></a>' % (pic_url, pic_url)
 
             # 转发微博
             retweeted_status = post.get('mblog', None).get('retweeted_status', None)
@@ -153,17 +163,25 @@ class EmailTool(object):
                 if (retweeted_status_pics is not None) and (len(retweeted_status_pics) > 1):
                     retweeted_status_lis = '<ul class="articleimgul">'
                     for retweeted_status_pic in retweeted_status_pics:
+                        if retweeted_status_pic.get('large', None) is None:
+                            pic_url = retweeted_status_pic.get('url', None)
+                        else:
+                            pic_url = retweeted_status_pic.get('large', None).get('url', None)
+
                         retweeted_status_li = '<li class="articleimgli"><a href="%s"><img class="articleimgimg" ' \
-                                              'src="%s" alt="img"></a></li>' % (retweeted_status_pic.get('url', None),
-                                                                                retweeted_status_pic.get('url', None))
+                                              'src="%s" alt="img"></a></li>' % (pic_url, pic_url)
                         retweeted_status_lis = retweeted_status_lis + retweeted_status_li
                     retweeted_status_lis = retweeted_status_lis + '</ul>'
                 # 只有一张图片
-                elif (pics is not None) and (len(pics) is 1):
+                elif (retweeted_status_pics is not None) and (len(retweeted_status_pics) is 1):
+                    if retweeted_status_pics[0].get('large', None) is None:
+                        pic_url = retweeted_status_pics[0].get('url', None)
+                    else:
+                        pic_url = retweeted_status_pics[0].get('large', None).get('url', None)
                     retweeted_status_lis = '<a href="%s"><img class="articleimgimg" src="%s" ' \
                                            'style="position: relative!important;' \
                                            'width: 90%%!important;margin:5px"></a>' \
-                                           % (pics[0].get('url', None), pics[0].get('url', None))
+                                           % (pic_url, pic_url)
 
                 # 拼接后的完整被转发的微博
                 retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" >' \
