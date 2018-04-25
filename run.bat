@@ -1,0 +1,2 @@
+python trance.py
+pause
