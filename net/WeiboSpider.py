@@ -7,6 +7,7 @@ import logging
 class WeiboSpider(object):
     def __init__(self):
         self.try_time = 0
+        self.text = ''
 
     # 获取微博列表的json数据，page_num由1开始
     def get_response(self, page_num, uid):
@@ -39,9 +40,12 @@ class WeiboSpider(object):
                 self.get_response(page_num, uid)
             else:
                 logging.debug('多次尝试仍无法完成请求')
+                self.text = response.text
+        else:
+            self.text = response.text
 
         self.try_time = 0
-        return response.text
+        return self.text
 
     def get_weibo_full_text(self, url):
         headers = {'cookie': config.SPIDER_COOKIE, 'user-agent': config.SPIDER_USER_AGENT}

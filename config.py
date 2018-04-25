@@ -2,15 +2,15 @@
 
 
 # 爬虫设置
+# 用户登陆后的cookie
 SPIDER_COOKIE = ''
 SPIDER_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 ' \
              '(KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
 # 爬取对象的uid
 SPIDER_UIDS = []
-# 单人单次最多爬取新发微博数量
-SPIDER_MAX_COUNT = 15
 # 接口请求间隔，单位秒
 SPIDER_INTERVAL = 1
+# 爬取间隔，秒
 SPIDER_TRANCE_INTERVAL = 60
 
 
@@ -25,3 +25,4 @@ MONGO_COLLECTION_NAME = 'post_list'
 MAIL_FROM = ''
 MAIL_PSD = ''
 MAIL_TO = ''
+
