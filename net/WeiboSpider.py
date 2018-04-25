@@ -36,12 +36,12 @@ class WeiboSpider(object):
         # 如果响应的状态码不是200，重试5次
         status_code = response.status_code
         if status_code is not requests.codes.ok:
-            logger.debug('返回的状态码为：%s ，重新尝试请求' % status_code)
+            logger.info('返回的状态码为：%s ，重新尝试请求' % status_code)
             self.try_time = self.try_time + 1
             if self.try_time < 6:
                 self.get_response(page_num, uid)
             else:
-                logger.debug('多次尝试仍无法完成请求')
+                logger.error('多次尝试仍无法完成请求')
                 self.text = response.text
         else:
             self.text = response.text
