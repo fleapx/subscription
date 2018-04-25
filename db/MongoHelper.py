@@ -5,6 +5,8 @@ import config
 class MongoHelper(object):
     def __init__(self):
         self.client = pymongo.MongoClient(config.MONGO_HOST, config.MONGO_PORT)
+        self.db_auth = self.client.admin
+        self.db_auth.authenticate(config.MONGO_USERNAME, config.MONGO_PSD)
         self.db = self.client[config.MONGO_DB_NAME]
         self.collection = self.db[config.MONGO_COLLECTION_NAME]
 
