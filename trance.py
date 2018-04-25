@@ -3,16 +3,12 @@ from emailtool.EmailTool import EmailTool
 from db.MongoHelper import MongoHelper
 import config
 import json
-import logging
+from log.Logger import Logger
 import time
 import sys
 import re
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="[%(asctime)s] %(name)s:%(levelname)s: %(message)s"
-)
-
+logger = Logger('log.log')
 weiboSpider = WeiboSpider()
 mongoHelper = MongoHelper()
 emailTool = EmailTool()
@@ -23,16 +19,17 @@ def start():
     # 迭代需要追踪的用户
     for uid in config.SPIDER_UIDS:
         time.sleep(config.SPIDER_INTERVAL)
-        logging.debug('正在爬取用户：%s 的微博' % uid)
+        logger.debug('正在爬取用户：%s 的微博' % uid)
         response_text = weiboSpider.get_response(1, uid)
         try:
             response_json = json.loads(response_text)
-            logging.debug('json转换成功')
+            logger.debug('json转换成功')
         except Exception:
             raise Exception('response转json失败，response：%s' % response_text)
 
         if response_json['ok'] is not 1:
-            raise Exception('获取微博数据失败，返回的response：%s' % response_text)
+            logger.info('响应code异常，返回的response：%s' % response_text)
+            continue
 
         # 迭代微博列表
         data = response_json['data']
@@ -58,7 +55,7 @@ def start():
                         retweed_status['text'] = get_full_text(retweed_status['text'])
 
                     result.append(card)
-                    logging.debug("获取到一条新微博：%s" % card)
+                    logger.debug("获取到一条新微博：%s" % card)
                 else:
                     # 结束当前循环
                     break
@@ -79,9 +76,9 @@ def get_full_text(text):
 while True:
     try:
         result = start()
-        logging.debug('获取到了 %s 条新微博' % len(result))
+        logger.debug('获取到了 %s 条新微博' % len(result))
     except Exception as e:
-        logging.error('获取微博数据失败，异常信息：%s' % str(e))
+        logger.error('获取微博数据失败，异常信息：%s' % str(e))
         emailTool.sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), 1)
         sys.exit()
 
@@ -91,5 +88,5 @@ while True:
         # 保存到数据库
         mongoHelper.insert_post_mary(result)
 
-    logging.debug('休眠，等待下次查询')
+    logger.debug('休眠，等待下次查询')
     time.sleep(config.SPIDER_TRANCE_INTERVAL)

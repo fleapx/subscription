@@ -1,9 +1,11 @@
 import smtplib
 from email.mime.text import MIMEText
 import config
-import logging
 import time
 import re
+from log.Logger import Logger
+
+logger = Logger('log.log')
 
 
 class EmailTool(object):
@@ -16,7 +18,7 @@ class EmailTool(object):
             try:
                 context = self.format_post(context)
             except Exception as e:
-                logging.error('格式化数据失败，错误信息：%s' % str(e))
+                logger.error('格式化数据失败，错误信息：%s' % str(e))
                 subject = '错误警告'
                 context = '格式化数据失败，错误信息：%s' % str(e)
 
@@ -30,9 +32,9 @@ class EmailTool(object):
             smtp.connect('smtp.qq.com', '465')
             smtp.login(config.MAIL_FROM, config.MAIL_PSD)
             smtp.sendmail(config.MAIL_FROM, config.MAIL_TO, msg.as_string())
-            logging.debug("邮件发送成功")
+            logger.debug("邮件发送成功")
         except Exception as e:
-            logging.error("邮件发送失败:%s" % str(e))
+            logger.error("邮件发送失败:%s" % str(e))
 
     # 格式化数据为html
     def format_post(self, post_list):
