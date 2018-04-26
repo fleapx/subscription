@@ -13,7 +13,7 @@ class EmailTool(object):
         pass
 
     # type 为0返回微博数据，需要格式化 1为异常信息，直接返回
-    def sendMSG(self, subject, context, type):
+    def sendMSG(self, subject, context, mailto, type):
         if type is 0:
             try:
                 context = self.format_post(context)
@@ -21,17 +21,18 @@ class EmailTool(object):
                 logger.error('格式化数据失败，错误信息：%s' % str(e))
                 subject = '错误警告'
                 context = '格式化数据失败，错误信息：%s' % str(e)
+                mailto = config.ADMIN_MAIL
 
         msg = MIMEText(context, _subtype='html', _charset='utf-8')
         msg['Subject'] = subject
         msg['From'] = config.MAIL_FROM
-        msg['To'] = config.MAIL_TO
+        msg['To'] = mailto
 
         try:
             smtp = smtplib.SMTP_SSL()
             smtp.connect('smtp.qq.com', '465')
             smtp.login(config.MAIL_FROM, config.MAIL_PSD)
-            smtp.sendmail(config.MAIL_FROM, config.MAIL_TO, msg.as_string())
+            smtp.sendmail(config.MAIL_FROM, mailto, msg.as_string())
             logger.debug("邮件发送成功")
         except Exception as e:
             logger.error("邮件发送失败:%s" % str(e))
