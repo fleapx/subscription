@@ -10,23 +10,19 @@ import sys
 import re
 
 logger = Logger('other/log.log')
-weiboSpider = WeiboSpider()
-mongoHelper = MongoHelper()
-mysqlHelper = MySQLHelper()
-emailTool = EmailTool()
 
 
 def get_weibo_list_by_uid():
     # 返回的结果，key为uid，value为爬取的所有微博
     result = {}
     # 从数据库获取所有需要追踪的微博uid
-    uid_list = mysqlHelper.get_all_uids()
+    uid_list = MySQLHelper().get_all_uids()
     # 迭代需要追踪的用户
     for uid_info in uid_list:
         weibo_list = []
         time.sleep(config.SPIDER_INTERVAL)
         logger.debug('正在爬取用户：%s 的微博' % uid_info[1])
-        response_text = weiboSpider.get_response(1, uid_info[0])
+        response_text = WeiboSpider().get_response(1, uid_info[0])
         try:
             response_json = json.loads(response_text)
             logger.debug('json转换成功')
@@ -45,7 +41,7 @@ def get_weibo_list_by_uid():
                 # 判断数据库是否存在该微博，不存在添加到结果列表
                 # 若存在说明之前的微博已经爬取过，不再请求
                 item_id = card['itemid']
-                document = mongoHelper.find_post_by_item_id(item_id)
+                document = MongoHelper().find_post_by_item_id(item_id)
 
                 if document is None:
                     # 将微博创建时间改为当前时间戳(秒)
@@ -77,7 +73,7 @@ def get_full_text(text):
     if len(urls) is 1:
         # 加载全文
         full_text_url = 'https://m.weibo.cn%s' % urls[0]
-        text = weiboSpider.get_weibo_full_text(full_text_url)
+        text = WeiboSpider().get_weibo_full_text(full_text_url)
     return text
 
 
@@ -86,11 +82,11 @@ while True:
         weibo_list_by_uid = get_weibo_list_by_uid()
     except Exception as e:
         logger.error('获取微博数据失败，异常信息：%s' % str(e))
-        emailTool.sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), 1)
+        EmailTool().sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), 1)
         sys.exit()
 
     # 获取所有邮箱及其对应的uid
-    mail_and_uids = mysqlHelper.get_mail_and_uids()
+    mail_and_uids = MySQLHelper().get_mail_and_uids()
     weibo_all_list = []
     for mail in mail_and_uids:
         weibo_list = []
@@ -107,9 +103,9 @@ while True:
                 weibo_all_list.append(weibo)
 
         # 发邮件
-        emailTool.sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
-    #保存到数据库
+        EmailTool().sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
+    # 保存到数据库
     if len(weibo_all_list) is not 0:
-        mongoHelper.insert_post_mary(weibo_all_list)
+        MongoHelper().insert_post_mary(weibo_all_list)
     logger.debug('休眠，等待下次查询')
     time.sleep(config.SPIDER_TRANCE_INTERVAL)

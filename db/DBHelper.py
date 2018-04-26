@@ -33,29 +33,31 @@ class MySQLHelper(object):
         self.db = pymysql.connect(config.MYSQL_HOST,config.MYSQL_USER_NAME,
                                   config.MYSQL_USER_PSD, config.MYSQL_DB_NAME,
                                   charset='utf8', use_unicode=True)
-        self.cursor = self.db.cursor()
 
     # 获取所有正在追踪的微博uid
     def get_all_uids(self):
-        sql = 'SELECT uid, comment FROM traced_uid WHERE status = 0 GROUP BY uid;'
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-        return result
+        with self.db.cursor() as cursor:
+            sql = 'SELECT uid, comment FROM traced_uid WHERE status = 0 GROUP BY uid;'
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return result
 
     # 获取所有用户邮箱及其对应的uid列表
     def get_mail_and_uids(self):
         result = {}
 
-        # 获取所有用户邮箱
-        sql = 'SELECT user_email FROM traced_uid WHERE status = 0 GROUP BY user_email;'
-        self.cursor.execute(sql)
-        user_mail_list = self.cursor.fetchall()
+        with self.db.cursor() as cursor:
+            # 获取所有用户邮箱
+            sql = 'SELECT user_email FROM traced_uid WHERE status = 0 GROUP BY user_email;'
+            cursor.execute(sql)
+            user_mail_list = cursor.fetchall()
 
         # 根据用户邮箱获取所有追踪的uid
         for user_mail in user_mail_list:
-            sql = 'SELECT uid FROM traced_uid WHERE user_email = %s AND status = 0;'
-            self.cursor.execute(sql, user_mail[0])
-            uid_list = self.cursor.fetchall()
+            with self.db.cursor() as cursor:
+                sql = 'SELECT uid FROM traced_uid WHERE user_email = %s AND status = 0;'
+                cursor.execute(sql, user_mail[0])
+                uid_list = cursor.fetchall()
             list = []
             for uid_info in uid_list:
                 list.append(uid_info[0])
