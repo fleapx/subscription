@@ -1,3 +1,5 @@
+CREATE DATABASE weibotrace;
+USE weibotrace;
 CREATE TABLE traced_uid
 (
   id         INT AUTO_INCREMENT

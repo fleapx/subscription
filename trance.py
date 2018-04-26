@@ -109,6 +109,7 @@ while True:
         # 发邮件
         emailTool.sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
     #保存到数据库
-    mongoHelper.insert_post_mary(weibo_all_list)
+    if len(weibo_all_list) is not 0:
+        mongoHelper.insert_post_mary(weibo_all_list)
     logger.debug('休眠，等待下次查询')
     time.sleep(config.SPIDER_TRANCE_INTERVAL)
