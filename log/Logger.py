@@ -2,7 +2,7 @@ import logging
 
 
 class Logger:
-    def __init__(self, path, cmd_level=logging.DEBUG, file_level=logging.INFO):
+    def __init__(self, path, cmd_level=logging.DEBUG, file_level=logging.DEBUG):
         self.logger = logging.getLogger(path)
         self.logger.setLevel(logging.DEBUG)
         if not self.logger.handlers:
