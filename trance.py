@@ -9,7 +9,7 @@ import time
 import sys
 import re
 
-logger = Logger('log.log')
+logger = Logger('other/log.log')
 weiboSpider = WeiboSpider()
 mongoHelper = MongoHelper()
 mysqlHelper = MySQLHelper()

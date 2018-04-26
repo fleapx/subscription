@@ -5,7 +5,7 @@ import time
 import re
 from log.Logger import Logger
 
-logger = Logger('log.log')
+logger = Logger('other/log.log')
 
 
 class EmailTool(object):
