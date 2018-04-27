@@ -35,7 +35,7 @@ def get_weibo_list_by_uid():
 
         # 迭代微博列表
         data = response_json['data']
-        logger.debug('获取到的微博个数：%s' % len(data))
+        logger.debug('获取到的微博个数：%s' % len(data['cards']))
         for card in data['cards']:
             # 判断是否是微博,card_type为9是微博
             if card['card_type'] is 9:
@@ -62,7 +62,7 @@ def get_weibo_list_by_uid():
                 else:
                     logger.debug('该微博已存在：%s' % document)
                     # 结束当前循环
-                    break
+                    continue
             else:
                 logger.debug('card_type不为9')
         if len(weibo_list) is not 0:
