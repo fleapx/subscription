@@ -9,7 +9,7 @@ import time
 import sys
 import re
 
-logger = Logger('other/log.log')
+logger = Logger('log.log')
 
 
 def get_weibo_list_by_uid():

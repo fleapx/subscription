@@ -3,7 +3,7 @@ import config
 import re
 from log.Logger import Logger
 
-logger = Logger('other/log.log')
+logger = Logger('log.log')
 
 
 class WeiboSpider(object):
