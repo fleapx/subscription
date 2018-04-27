@@ -35,6 +35,7 @@ def get_weibo_list_by_uid():
 
         # 迭代微博列表
         data = response_json['data']
+        logger.debug('获取到的微博：%s' % response_text)
         for card in data['cards']:
             # 判断是否是微博,card_type为9是微博
             if card['card_type'] is 9:
