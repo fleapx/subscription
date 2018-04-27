@@ -59,6 +59,7 @@ def get_weibo_list_by_uid():
                     weibo_list.append(card)
                     logger.debug("获取到一条新微博：%s" % card)
                 else:
+                    logger.debug('该微博已存在：%s' % document)
                     # 结束当前循环
                     break
         if len(weibo_list) is not 0:
