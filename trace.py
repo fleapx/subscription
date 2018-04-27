@@ -82,7 +82,7 @@ while True:
         weibo_list_by_uid = get_weibo_list_by_uid()
     except Exception as e:
         logger.error('获取微博数据失败，异常信息：%s' % str(e))
-        EmailTool().sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), 1)
+        EmailTool().sendMSG('异常警告', '获取微博数据失败，异常信息：%s' % str(e), config.ADMIN_MAIL, 1)
         sys.exit()
 
     # 获取所有邮箱及其对应的uid

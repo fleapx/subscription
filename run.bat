@@ -1,2 +1,2 @@
-python trance.py
+python trace.py
 pause
