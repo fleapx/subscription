@@ -10,4 +10,4 @@ CREATE TABLE traced_uid
   user_email VARCHAR(120)    NOT NULL,
   status     INT DEFAULT '0' NOT NULL
   COMMENT '0为正常订阅，1为暂停'
-)
+) CHARACTER SET UTF8;
