@@ -12,7 +12,7 @@ class Logger:
             sh.setFormatter(fmt)
             sh.setLevel(cmd_level)
             # 设置文件日志
-            fh = logging.FileHandler(path)
+            fh = logging.FileHandler(path, encoding='utf-8')
             fh.setFormatter(fmt)
             fh.setLevel(file_level)
             self.logger.addHandler(sh)

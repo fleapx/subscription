@@ -103,7 +103,8 @@ while True:
                 weibo_all_list.append(weibo)
 
         # 发邮件
-        EmailTool().sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
+        if len(weibo_list) is not 0:
+            EmailTool().sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
     # 保存到数据库
     if len(weibo_all_list) is not 0:
         MongoHelper().insert_post_mary(weibo_all_list)
