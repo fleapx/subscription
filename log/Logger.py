@@ -1,6 +1,7 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
+
 class Logger:
     def __init__(self, path, cmd_level=logging.DEBUG, file_level=logging.DEBUG):
         self.logger = logging.getLogger(path)
