@@ -42,24 +42,35 @@ class MySQLHelper(object):
             result = cursor.fetchall()
             return result
 
-    # 获取所有用户邮箱及其对应的uid列表
-    def get_mail_and_uids(self):
+    # 获取所有用户邮箱|id及其对应的uid列表
+    # key 为邮箱以及user_id，以|分割
+    # value 为uid列表
+    def get_mailuserid_and_uids(self):
         result = {}
 
         with self.db.cursor() as cursor:
             # 获取所有用户邮箱
-            sql = 'SELECT user_email FROM traced_uid WHERE status = 0 GROUP BY user_email;'
+            sql = 'SELECT user_email,user_id FROM traced_uid WHERE status = 0 GROUP BY user_email;'
             cursor.execute(sql)
             user_mail_list = cursor.fetchall()
 
         # 根据用户邮箱获取所有追踪的uid
         for user_mail in user_mail_list:
             with self.db.cursor() as cursor:
-                sql = 'SELECT uid FROM traced_uid WHERE user_email = %s AND status = 0;'
-                cursor.execute(sql, user_mail[0])
+                sql = 'SELECT uid FROM traced_uid WHERE user_id = %s AND status = 0;'
+                cursor.execute(sql, user_mail[1])
                 uid_list = cursor.fetchall()
             list = []
             for uid_info in uid_list:
                 list.append(uid_info[0])
-            result[user_mail[0]] = list
+            result['%s|%s' % (user_mail[0], user_mail[1])] = list
         return result
+
+    # 插入邮件发送记录
+    def insert_mail_log(self, to_mail, from_mail, context, user_id, send_timestamp):
+        with self.db.cursor() as cursor:
+            sql = 'INSERT email_log (from_mail, to_mail, user_id, send_timestamp, context) VALUE (%s,%s,%s,%s,%s);'
+            print('%s,%s,%s,%s,%s' % (from_mail, to_mail, user_id, send_timestamp, context))
+            cursor.execute(sql, (from_mail, to_mail, user_id, send_timestamp, context))
+            self.db.commit()
+

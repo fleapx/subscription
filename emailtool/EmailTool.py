@@ -30,7 +30,7 @@ class EmailTool(object):
 
         try:
             smtp = smtplib.SMTP_SSL()
-            smtp.connect('smtp.qq.com', '465')
+            smtp.connect(config.MAIL_SMTP_ADDR, config.MAIL_SMTP_PORT)
             smtp.login(config.MAIL_FROM, config.MAIL_PSD)
             smtp.sendmail(config.MAIL_FROM, mailto, msg.as_string())
             logger.debug("邮件发送成功")

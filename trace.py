@@ -58,9 +58,7 @@ def get_weibo_list_by_uid():
                         retweed_status['text'] = get_full_text(retweed_status['text'])
 
                     weibo_list.append(card)
-                    logger.debug("获取到一条新微博：%s" % card)
                 else:
-                    logger.debug('该微博已存在：%s' % document)
                     # 结束当前循环
                     continue
             else:
@@ -90,12 +88,16 @@ while True:
         sys.exit()
 
     # 获取所有邮箱及其对应的uid
-    mail_and_uids = MySQLHelper().get_mail_and_uids()
+    mailuserid_and_uids = MySQLHelper().get_mailuserid_and_uids()
     weibo_all_list = []
-    for mail in mail_and_uids:
+    for mailuserid in mailuserid_and_uids:
+        mail_userid = mailuserid.split('|')
+        mail = mail_userid[0]
+        user_id = mail_userid[1]
+
         weibo_list = []
         # 该邮箱下所有订阅的uid
-        uid_list = mail_and_uids[mail]
+        uid_list = mailuserid_and_uids[mailuserid]
         for uid in uid_list:
             logger.debug('正在处理邮箱：%s 所订阅的uid：%s' % (mail, uid))
             if weibo_list_by_uid.get(uid, None) is None:
@@ -109,6 +111,7 @@ while True:
         # 发邮件
         if len(weibo_list) is not 0:
             EmailTool().sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
+            MySQLHelper().insert_mail_log(mail, config.MAIL_FROM, json.dumps(weibo_list), user_id, int(time.time()*1000))
     # 保存到数据库
     if len(weibo_all_list) is not 0:
         MongoHelper().insert_post_mary(weibo_all_list)

@@ -20,8 +20,7 @@ class WeiboSpider(object):
                  'containerid': '107603%s' % uid,
                  'page': page_num}
 
-        headers = {'cookie': config.SPIDER_COOKIE,
-                   'user-agent': config.SPIDER_USER_AGENT,
+        headers = {'user-agent': config.SPIDER_USER_AGENT,
                    'accept': 'application/json,text/plain,*/*',
                    'accept-language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
                    'accept-encoding': 'gzip,deflate,br',
@@ -50,7 +49,7 @@ class WeiboSpider(object):
         return self.text
 
     def get_weibo_full_text(self, url):
-        headers = {'cookie': config.SPIDER_COOKIE, 'user-agent': config.SPIDER_USER_AGENT}
+        headers = {'user-agent': config.SPIDER_USER_AGENT}
         response = requests.get(url, headers=headers)
         # 页面源码
         html_text = response.text
