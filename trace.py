@@ -111,7 +111,8 @@ while True:
         # 发邮件
         if len(weibo_list) is not 0:
             EmailTool().sendMSG('您关注的微博有更新啦', weibo_list, mail, 0)
-            MySQLHelper().insert_mail_log(mail, config.MAIL_FROM, json.dumps(weibo_list), user_id, int(time.time()*1000))
+            MySQLHelper().insert_mail_log(mail, config.MAIL_FROM,
+                                          json.dumps(weibo_list), user_id, int(time.time()*1000), len(weibo_list))
     # 保存到数据库
     if len(weibo_all_list) is not 0:
         MongoHelper().insert_post_mary(weibo_all_list)

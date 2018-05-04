@@ -67,10 +67,10 @@ class MySQLHelper(object):
         return result
 
     # 插入邮件发送记录
-    def insert_mail_log(self, to_mail, from_mail, context, user_id, send_timestamp):
+    def insert_mail_log(self, to_mail, from_mail, context, user_id, send_timestamp, weibo_count):
         with self.db.cursor() as cursor:
-            sql = 'INSERT email_log (from_mail, to_mail, user_id, send_timestamp, context) VALUE (%s,%s,%s,%s,%s);'
-            print('%s,%s,%s,%s,%s' % (from_mail, to_mail, user_id, send_timestamp, context))
-            cursor.execute(sql, (from_mail, to_mail, user_id, send_timestamp, context))
+            sql = 'INSERT email_log (from_mail, to_mail, user_id, send_timestamp, context, weibo_count) ' \
+                  'VALUE (%s,%s,%s,%s,%s,%s);'
+            cursor.execute(sql, (from_mail, to_mail, user_id, send_timestamp, context, weibo_count))
             self.db.commit()
 
