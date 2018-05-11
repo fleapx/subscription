@@ -2,6 +2,7 @@ import requests
 import config
 import re
 from log.Logger import Logger
+import json
 
 logger = Logger('log.log')
 
@@ -10,6 +11,7 @@ class WeiboSpider(object):
     def __init__(self):
         self.try_time = 0
         self.text = ''
+        self.request_seccess = True
 
     # 获取微博列表的json数据，page_num由1开始
     def get_response(self, page_num, uid):
@@ -30,14 +32,34 @@ class WeiboSpider(object):
                    'cache-control': 'no-cache'}
 
         response = requests.get(url, headers=headers, params=param)
-        logger.debug('微博列表请求url：%s' % response.url)
-
-        # 如果响应的状态码不是200，重试5次
+        # 状态码
         status_code = response.status_code
+        # 返回的正文
+        response_text = response.text
+
+        # 状态码不为200
         if status_code is not requests.codes.ok:
-            logger.info('返回的状态码为：%s ，重新尝试请求' % status_code)
+            logger.debug('返回状态码异常，code：%s' % status_code)
+            self.request_seccess = False
+
+        # 返回数据无法解析
+        try:
+            response_json = json.loads(response_text)
+            if response_json['ok'] is not 1:
+                # 请求失败
+                self.request_seccess = False
+                logger.debug('请求失败，返回的response:%s' % response_text)
+            else:
+                self.request_seccess = True
+        except Exception as e:
+            self.request_seccess = False
+            logger.debug('json转换失败，返回的response：%s' % response_text)
+
+        # 请求失败，重试
+        if not self.request_seccess:
+            logger.info('请求失败 ，重新尝试请求，response：%s' % response_text)
             self.try_time = self.try_time + 1
-            if self.try_time < 6:
+            if self.try_time <= config.REQUEST_RETRY_TIME:
                 self.get_response(page_num, uid)
             else:
                 logger.error('多次尝试仍无法完成请求')
@@ -46,6 +68,8 @@ class WeiboSpider(object):
             self.text = response.text
 
         self.try_time = 0
+        self.request_seccess = True
+        logger.debug('返回的response：%s' % self.text)
         return self.text
 
     def get_weibo_full_text(self, url):

@@ -8,6 +8,8 @@ SPIDER_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit
 SPIDER_INTERVAL = 1
 # 爬取间隔，秒
 SPIDER_TRANCE_INTERVAL = 45
+# 请求失败重试次数
+REQUEST_RETRY_TIME = 5
 
 
 # mongodb配置信息
