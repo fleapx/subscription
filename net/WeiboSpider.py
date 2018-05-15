@@ -39,7 +39,7 @@ class WeiboSpider(object):
 
         # 状态码不为200
         if status_code is not requests.codes.ok:
-            logger.debug('返回状态码异常，code：%s' % status_code)
+            logger.error('返回状态码异常，code：%s' % status_code)
             self.request_seccess = False
 
         # 返回数据无法解析
@@ -48,16 +48,15 @@ class WeiboSpider(object):
             if response_json['ok'] is not 1:
                 # 请求失败
                 self.request_seccess = False
-                logger.debug('请求失败，返回的response:%s' % response_text)
+                logger.error('请求失败，返回的response:%s' % response_text)
             else:
                 self.request_seccess = True
         except Exception as e:
             self.request_seccess = False
-            logger.debug('json转换失败，返回的response：%s' % response_text)
+            logger.error('json转换失败，返回的response：%s' % response_text)
 
         # 请求失败，重试
         if not self.request_seccess:
-            logger.info('请求失败 ，重新尝试请求，response：%s' % response_text)
             self.try_time = self.try_time + 1
             if self.try_time <= config.REQUEST_RETRY_TIME:
                 self.get_response(page_num, uid)
