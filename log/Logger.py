@@ -1,5 +1,5 @@
 import logging
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import RotatingFileHandler
 
 
 class Logger:
@@ -13,7 +13,7 @@ class Logger:
             sh.setFormatter(fmt)
             sh.setLevel(cmd_level)
             # 设置文件日志
-            fh = TimedRotatingFileHandler(filename=path, when='D', interval=5, backupCount=0, encoding='utf-8')
+            fh = RotatingFileHandler(filename=path, maxBytes=1024 * 1024 * 50, encoding='utf-8')
             fh.setFormatter(fmt)
             fh.setLevel(file_level)
             self.logger.addHandler(sh)
