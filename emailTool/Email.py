@@ -259,6 +259,8 @@ class Email(object):
 
     def replace_a_to_span(self, text):
         span = '<span style="color: #598abf;">'
+        text = re.sub('<span.+?>', '', text)
+        text = re.sub('</span>', '', text)
         text = re.sub('<a.+?>', span, text)
         text = re.sub('</a>', '</span>', text)
         return text
