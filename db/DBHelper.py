@@ -17,15 +17,20 @@ class MongoHelper(object):
     def insert_post_mary(self, posts):
         self.collection.insert_many(posts)
 
-    def delete_post_by_item_id(self, item_id):
-        self.collection.delete_one({'itemid': item_id})
-
-    def delete_post(self, post):
-        self.collection.delete_one(post)
+    def update_post_many(self, posts):
+        for post in posts:
+            self.collection.update({'_id': post['_id']}, post)
 
     def find_post_by_item_id(self, item_id):
         document = self.collection.find_one({'itemid': item_id})
         return document
+
+    def find_post_by_send_flag(self, send_flag):
+        result = []
+        cursor = self.collection.find({'send_flag': send_flag}).sort('mblog.created_at')
+        for c in cursor:
+            result.append(c)
+        return result
 
 
 class MySQLHelper(object):

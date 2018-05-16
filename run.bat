@@ -1,2 +1,0 @@
-python trace.py
-pause

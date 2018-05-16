@@ -9,8 +9,10 @@ SPIDER_INTERVAL = 1
 # 爬取间隔，秒
 SPIDER_TRANCE_INTERVAL = 45
 # 请求失败重试次数
-REQUEST_RETRY_TIME = 5
-
+MAX_RETRIES = 5
+# send_flag字段值，表明该微博是否已经发送过邮件
+MAIL_SEND = 0
+MAIL_NOT_SEND = 1
 
 # mongodb配置信息
 MONGO_HOST = '127.0.0.1'
@@ -34,4 +36,6 @@ MAIL_SMTP_ADDR = ''
 MAIL_SMTP_PORT = ''
 # 管理员邮箱，发送异常信息
 ADMIN_MAIL = ''
+# 分钟
+MAIL_SEND_INTERVAL = 30
 

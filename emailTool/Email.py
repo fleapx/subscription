@@ -1,26 +1,76 @@
 import smtplib
 from email.mime.text import MIMEText
+from db.DBHelper import MongoHelper
+from db.DBHelper import MySQLHelper
 import config
+from log.Logger import Logger
 import time
 import re
-from log.Logger import Logger
+import traceback
+from bson.json_util import dumps
 
 logger = Logger('log.log')
 
 
-class EmailTool(object):
+class Email(object):
     def __init__(self):
         pass
+
+    def send(self):
+        # 所有未发邮件微博
+        weibo_list = MongoHelper().find_post_by_send_flag(config.MAIL_NOT_SEND)
+
+        # 获取所有邮箱及其对应的uid
+        # key 为邮箱以及user_id，以|分割
+        # value 为uid列表
+        mailuserid_and_uids = MySQLHelper().get_mailuserid_and_uids()
+        logger.debug('mailuserid_and_uids:%s' % mailuserid_and_uids)
+        logger.debug('weibo个数：%s' % len(weibo_list))
+        for key in mailuserid_and_uids:
+            mail_and_userid = key.split('|')
+            # 邮箱
+            mail = mail_and_userid[0]
+            # 用户id
+            user_id = mail_and_userid[1]
+            # 该邮箱下所有订阅的uid
+            uid_list = mailuserid_and_uids[key]
+
+            # 用于保存需要发给该用户的微博
+            send_list = []
+
+            # 迭代用户所订阅的uid，并迭代所有未发送微博列表，比较uid是否匹配，是则添加到weibo_list
+            for weibo in weibo_list:
+                for uid in uid_list:
+                    if str(weibo['mblog']['user']['id']) == str(uid):
+                        send_list.append(weibo)
+
+            # 发邮件
+            if len(send_list) != 0:
+                logger.debug('发送列表不为空，发送微博个数：%s' % len(send_list))
+                try:
+                    self.sendMSG('您关注的微博有更新啦', send_list, mail, 0)
+                    # 数据库添加发送记录
+                    MySQLHelper().insert_mail_log(mail, config.MAIL_FROM,
+                                    dumps(send_list), user_id, int(time.time() * 1000), len(send_list))
+                    # 将发送的微博标记为已发送
+                    for sl in send_list:
+                        sl['send_flag'] = config.MAIL_SEND
+                    MongoHelper().update_post_many(send_list)
+                except Exception:
+                    msg = traceback.format_exc()
+                    logger.error('邮件发送异常：%s' % msg)
 
     # type 为0返回微博数据，需要格式化 1为异常信息，直接返回
     def sendMSG(self, subject, context, mailto, type):
         if type is 0:
             try:
                 context = self.format_post(context)
-            except Exception as e:
-                logger.error('格式化数据失败，错误信息：%s' % str(e))
-                subject = '错误警告'
-                context = '格式化数据失败，错误信息：%s' % str(e)
+                logger.debug('格式化数据成功')
+            except Exception:
+                msg = traceback.format_exc()
+                logger.error('格式化数据失败，错误信息：%s' % msg)
+                subject = '异常警告'
+                context = '格式化数据失败，错误信息：%s' % msg
                 mailto = config.ADMIN_MAIL
 
         msg = MIMEText(context, _subtype='html', _charset='utf-8')
@@ -28,14 +78,11 @@ class EmailTool(object):
         msg['From'] = config.MAIL_FROM
         msg['To'] = mailto
 
-        try:
-            smtp = smtplib.SMTP_SSL()
-            smtp.connect(config.MAIL_SMTP_ADDR, config.MAIL_SMTP_PORT)
-            smtp.login(config.MAIL_FROM, config.MAIL_PSD)
-            smtp.sendmail(config.MAIL_FROM, mailto, msg.as_string())
-            logger.debug("邮件发送成功")
-        except Exception as e:
-            logger.error("邮件发送失败:%s" % str(e))
+        smtp = smtplib.SMTP_SSL()
+        smtp.connect(config.MAIL_SMTP_ADDR, config.MAIL_SMTP_PORT)
+        smtp.login(config.MAIL_FROM, config.MAIL_PSD)
+        smtp.sendmail(config.MAIL_FROM, mailto, msg.as_string())
+        logger.debug('邮件发送成功，发送邮箱：%s' % mailto)
 
     # 格式化数据为html
     def format_post(self, post_list):
