@@ -254,7 +254,8 @@ class Email(object):
                            retweeted_status_html)
             result = result + card_html
 
-        result = result + '</body></html>'
+        result = result + '<div><span style="display: block;text-align: center">Powered by ' \
+                          '<a href="http://eros.pub">eros.pub</a></span></div></body></html>'
         return result
 
     def replace_a_to_span(self, text):

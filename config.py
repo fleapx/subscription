@@ -10,6 +10,8 @@ SPIDER_INTERVAL = 1
 SPIDER_TRANCE_INTERVAL = 45
 # 请求失败重试次数
 MAX_RETRIES = 5
+# 请求超时/秒
+TIME_OUT = 180
 # send_flag字段值，表明该微博是否已经发送过邮件
 MAIL_SEND = 0
 MAIL_NOT_SEND = 1
@@ -27,7 +29,7 @@ MONGO_PSD = 'root'
 MYSQL_HOST = '127.0.0.1'
 MYSQL_DB_NAME = 'weibotrace'
 MYSQL_USER_NAME = 'root'
-MYSQL_USER_PSD = 'root'
+MYSQL_USER_PSD = 'rootrootroot'
 
 # 发送邮件相关配置
 MAIL_FROM = ''
@@ -36,6 +38,4 @@ MAIL_SMTP_ADDR = ''
 MAIL_SMTP_PORT = ''
 # 管理员邮箱，发送异常信息
 ADMIN_MAIL = ''
-# 分钟
-MAIL_SEND_INTERVAL = 30
 

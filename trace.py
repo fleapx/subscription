@@ -2,6 +2,7 @@ import schedule
 import config
 from spider.WeiboSpider import WeiboSpider
 from emailTool.Email import Email
+import time
 
 
 def run_spider():
@@ -15,7 +16,8 @@ def send_mail():
 # 定时调用爬虫
 schedule.every(config.SPIDER_TRANCE_INTERVAL).seconds.do(run_spider)
 # 定时发邮件
-schedule.every(config.MAIL_SEND_INTERVAL).minutes.do(send_mail)
+schedule.every().hour.do(send_mail)
 
 while True:
     schedule.run_pending()
+    time.sleep(1)

@@ -96,7 +96,7 @@ class WeiboSpider(object):
                    'pragma': 'no-cache',
                    'cache-control': 'no-cache'}
 
-        response = self.session.get(url, headers=headers, params=param, timeout=10)
+        response = self.session.get(url, headers=headers, params=param, timeout=config.TIME_OUT)
         return response.text
 
     def get_full_text(self, text):
@@ -106,7 +106,7 @@ class WeiboSpider(object):
             # 加载全文
             full_text_url = 'https://m.weibo.cn%s' % urls[0]
             headers = {'user-agent': config.SPIDER_USER_AGENT}
-            response = self.session.get(full_text_url, headers=headers, timeout=10)
+            response = self.session.get(full_text_url, headers=headers, timeout=config.TIME_OUT)
             # 页面源码
             html_text = response.text
             # 根据正则表达式获取微博正文
