@@ -22,7 +22,7 @@ def run_threading(job):
 # 定时调用爬虫
 schedule.every(config.SPIDER_TRANCE_INTERVAL).seconds.do(run_threading, run_spider)
 # 定时发邮件
-schedule.every(1).minutes.do(run_threading, send_mail)
+schedule.every().hour.do(run_threading, send_mail)
 
 while True:
     schedule.run_pending()
