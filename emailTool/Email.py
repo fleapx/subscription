@@ -24,8 +24,8 @@ class Email(object):
         # key 为邮箱以及user_id，以|分割
         # value 为uid列表
         mailuserid_and_uids = MySQLHelper().get_mailuserid_and_uids()
-        logger.debug('mailuserid_and_uids:%s' % mailuserid_and_uids)
-        logger.debug('weibo个数：%s' % len(weibo_list))
+        logger.info('mailuserid_and_uids:%s' % mailuserid_and_uids)
+        logger.info('weibo个数：%s' % len(weibo_list))
         for key in mailuserid_and_uids:
             mail_and_userid = key.split('|')
             # 邮箱
