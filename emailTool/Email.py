@@ -254,7 +254,7 @@ class Email(object):
                            retweeted_status_html)
             result = result + card_html
 
-        result = result + '<div><span style="display: block;text-align: center">Powered by ' \
+        result = result + '<div><span style="display: block;text-align: center;margin-top: 10px">Powered by ' \
                           '<a href="http://eros.pub">eros.pub</a></span></div></body></html>'
         return result
 
