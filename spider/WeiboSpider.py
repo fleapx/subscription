@@ -9,6 +9,7 @@ import time
 import re
 import traceback
 from emailTool.Email import Email
+from requests.exceptions import ChunkedEncodingError
 
 logger = Logger('log.log')
 
@@ -32,6 +33,8 @@ class WeiboSpider(object):
                 response_text = self.get_response_json(uid_info[0])
                 response_json = json.loads(response_text)
                 logger.debug('获取微博列表json成功')
+            except ChunkedEncodingError:
+                continue
             except Exception:
                 msg = traceback.format_exc()
                 logger.error('获取微博数据失败:%s' % msg)
