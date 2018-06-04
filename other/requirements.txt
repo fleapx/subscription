@@ -1,5 +1,0 @@
-pymongo
-pymysql
-requests
-schedule
-urllib3
