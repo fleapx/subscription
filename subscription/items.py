@@ -12,6 +12,17 @@ class WeiboItem(scrapy.Item):
     json = scrapy.Field()
 
 
+class WechatItem(scrapy.Item):
+    _id = scrapy.Field()
+    wechat_num = scrapy.Field()
+    author = scrapy.Field()
+    content_url = scrapy.Field()
+    title = scrapy.Field()
+    datetime = scrapy.Field()
+    content = scrapy.Field()
+    send_flag = scrapy.Field()
+
+
 class WeiboSubscription(scrapy.Item):
     uid = scrapy.Field()
     comment = scrapy.Field()

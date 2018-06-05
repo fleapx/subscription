@@ -37,19 +37,28 @@ MAIL_NOT_SEND = 1
 
 # 爬虫设置
 # 相同网站的爬取间隔/秒 (default: 0)
-DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 5
 # 设置爬取间隔为 0.5 * DOWNLOAD_DELAY ~ 1.5 * DOWNLOAD_DELAY
 RANDOMIZE_DOWNLOAD_DELAY = True
 
 ROBOTSTXT_OBEY = False
 
-
-COOKIES_ENABLED = False
+COOKIES_ENABLED = True
 
 ITEM_PIPELINES = {
    'subscription.pipelines.WeiboPipeline': 300,
+   'subscription.pipelines.WechatPipeline': 301,
 }
 
 DOWNLOADER_MIDDLEWARES = {
     'subscription.middlewares.HandleException': 543,
 }
+
+# 允许缓存
+# HTTPCACHE_ENABLED = True
+# 缓存过期时间/秒,为0永不过期
+# HTTPCACHE_EXPIRATION_SECS = 0
+# # 缓存目录
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
