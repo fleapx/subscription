@@ -15,6 +15,8 @@ def send_weibo():
     mysql_dao = SubscriptionDao()
 
     data = mongo_dao.find_weibo_by_send_flag(settings.MAIL_NOT_SEND)
+    if len(data) is 0:
+        return
     html = TemplateUtil.get_weibo_template(data)
     try:
         send_mail("您关注的微博有更新啦", html, settings.MAIL_TO)
@@ -36,6 +38,8 @@ def send_wechat():
     mysql_dao = SubscriptionDao()
 
     data = mongo_dao.find_wechat_by_send_flag(settings.MAIL_NOT_SEND)
+    if len(data) is 0:
+        return
     html = TemplateUtil.get_wechat_template(data)
     try:
         send_mail("您关注的公众号有更新啦", html, settings.MAIL_TO)
