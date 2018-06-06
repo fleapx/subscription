@@ -8,8 +8,8 @@ from subscription.items import WechatSubscription
 class WeiboMongoDao(object):
     def __init__(self):
         self.client = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)
-        self.db_auth = self.client.admin
-        self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
+        # self.db_auth = self.client.admin
+        # self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
         self.db = self.client[settings.MONGO_DB_NAME]
         self.collection = self.db[settings.MONGO_WEIBO_COLLECTION_NAME]
 
@@ -17,12 +17,36 @@ class WeiboMongoDao(object):
         for post in posts:
             self.collection.update({'_id': post['_id']}, post)
 
-    def find_post_by_send_flag(self, send_flag):
+    def find_weibo_by_send_flag(self, send_flag):
         result = []
         cursor = self.collection.find({'send_flag': send_flag}).sort('mblog.created_at')
         for c in cursor:
             result.append(c)
         return result
+
+
+class WechatMongoDao(object):
+    def __init__(self):
+        self.client = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)
+        # self.db_auth = self.client.admin
+        # self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
+        self.db = self.client[settings.MONGO_DB_NAME]
+        self.collection = self.db[settings.MONGO_WECHAT_COLLECTION_NAME]
+
+    def update_post_many(self, posts):
+        for post in posts:
+            self.collection.update({'_id': post['_id']}, post)
+
+    def find_wechat_by_send_flag(self, send_flag):
+        result = []
+        cursor = self.collection.find({'send_flag': send_flag}).sort('datetime')
+        for c in cursor:
+            result.append(c)
+        return result
+
+    def find_wechat_by_id(self, id):
+        document = self.collection.find_one({'_id': id})
+        return document
 
 
 class SubscriptionDao(object):
@@ -58,13 +82,12 @@ class SubscriptionDao(object):
                 result.append(item)
             return result
 
-
     # 插入邮件发送记录
-    def insert_mail_log(self, to_mail, from_mail, context, user_id, send_timestamp, weibo_count):
+    def insert_mail_log(self, to_mail, from_mail, context, user_id, send_timestamp):
         with self.db.cursor() as cursor:
-            sql = 'INSERT email_log (from_mail, to_mail, user_id, send_timestamp, context, weibo_count) ' \
-                  'VALUE (%s,%s,%s,%s,%s,%s);'
-            cursor.execute(sql, (from_mail, to_mail, user_id, send_timestamp, context, weibo_count))
+            sql = 'INSERT email_log (from_mail, to_mail, user_id, send_timestamp, context) ' \
+                  'VALUE (%s,%s,%s,%s,%s);'
+            cursor.execute(sql, (from_mail, to_mail, user_id, send_timestamp, context))
             self.db.commit()
 
     def close(self):

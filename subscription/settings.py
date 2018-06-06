@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# 文档
+# 文档：https://docs.scrapy.org/en/latest/
 
 BOT_NAME = 'subscription'
 
@@ -26,24 +26,20 @@ MYSQL_USER_PSD = 'rootrootroot'
 
 # 发送邮件相关配置
 MAIL_FROM = '1029109455@qq.com'
-MAIL_PSD = 'ropctotsmqsubehi'
-MAIL_SMTP_ADDR = 'smtp.qq.com'
-MAIL_SMTP_PORT = '465'
-# 管理员邮箱，发送异常信息
-ADMIN_MAIL = 'zhangwenl1993@126.com'
+MAIL_USER = '1029109455@qq.com'
+MAIL_PASS = 'ropctotsmqsubehi'
+MAIL_HOST = 'smtp.qq.com'
+MAIL_PORT = 465
+MAIL_TO = 'zhangwenl1993@126.com'
 # send_flag字段值，表明该微博是否已经发送过邮件
 MAIL_SEND = 0
 MAIL_NOT_SEND = 1
 
 # 爬虫设置
-# 相同网站的爬取间隔/秒 (default: 0)
-DOWNLOAD_DELAY = 5
-# 设置爬取间隔为 0.5 * DOWNLOAD_DELAY ~ 1.5 * DOWNLOAD_DELAY
-RANDOMIZE_DOWNLOAD_DELAY = True
 
 ROBOTSTXT_OBEY = False
 
-COOKIES_ENABLED = True
+COOKIES_ENABLED = False
 
 ITEM_PIPELINES = {
    'subscription.pipelines.WeiboPipeline': 300,

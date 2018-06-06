@@ -38,9 +38,6 @@ class WechatPipeline(object):
         if isinstance(item, WechatItem):
             inserted = self.collection.find_one({'_id': item['_id']})
 
-            print(inserted)
-            print(inserted is None)
-
             if inserted is None:
                 self.collection.insert_one(item)
 

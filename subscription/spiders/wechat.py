@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from subscription.DBHelper import SubscriptionDao
+from subscription.DBHelper import WechatMongoDao
 from scrapy.http import Request
 from subscription.items import WechatItem
 import re
@@ -31,6 +32,11 @@ class WechatSpider(scrapy.Spider):
         "Upgrade-Insecure-Requests": 1,
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/66.0.3359.181 Safari/537.36"
+    }
+
+    custom_settings = {
+        "DOWNLOAD_DELAY": 15,
+        "RANDOMIZE_DOWNLOAD_DELAY": True
     }
 
     def start_requests(self):
@@ -68,7 +74,11 @@ class WechatSpider(scrapy.Spider):
             item['send_flag'] = settings.MAIL_NOT_SEND
             item['wechat_num'] = response.meta.get("num", None)
 
-            yield Request(content_url, callback=self.parse_article, headers=self.article_headers, meta={"item": item})
+            # 判断是否爬取过该文章
+            mongo_dao = WechatMongoDao()
+            document = mongo_dao.find_wechat_by_id(item["_id"])
+            if document is None:
+                yield Request(content_url, callback=self.parse_article, headers=self.article_headers, meta={"item": item})
 
     def parse_article(self, response):
         item = response.meta.get("item", None)
@@ -76,7 +86,7 @@ class WechatSpider(scrapy.Spider):
         # 去除所有js标签
         body = re.sub("<script[\S\s]+?</script>", "", body)
         # 修改图片src
-        body = re.sub("data-src=", 'src=', body)
+        body = re.sub('data-src="', 'src="http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=', body)
         item["content"] = body
 
         yield item

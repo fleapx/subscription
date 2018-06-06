@@ -21,6 +21,11 @@ class WeiboSpider(scrapy.Spider):
                'pragma': 'no-cache',
                'cache-control': 'no-cache'}
 
+    custom_settings = {
+        "DOWNLOAD_DELAY": 2,
+        "RANDOMIZE_DOWNLOAD_DELAY": True
+    }
+
     def start_requests(self):
         dao = SubscriptionDao()
         weibo_subscriptions = dao.get_all_uids()
