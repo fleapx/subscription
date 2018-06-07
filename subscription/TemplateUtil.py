@@ -186,7 +186,9 @@ def replace_a_to_span( text):
 
 
 def get_wechat_template(data):
-    html = '<body><div style="background-color: #fff;margin: 10px auto;width: 95%; padding: 10px;max-width: 500px">'
+    html = '<!DOCTYPE html><html><head><title>wechat</title><meta name="referrer" content="never">' \
+           '</head><body><div style="background-color: #fff;margin: 10px auto;width: ' \
+           '95%; padding: 10px;max-width: 500px">'
     for article in data:
         html += '<h2>%s</h2>' \
                 '<div>' \
@@ -195,5 +197,5 @@ def get_wechat_template(data):
                 (article['title'], article['author'], time.strftime("%Y-%m-%d %H:%M:%S",
                             time.localtime(article['datetime'])), article['content'])
 
-    html += '</body>'
+    html += '</body></html>'
     return html

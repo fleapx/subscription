@@ -86,7 +86,7 @@ class WechatSpider(scrapy.Spider):
         # 去除所有js标签
         body = re.sub("<script[\S\s]+?</script>", "", body)
         # 修改图片src
-        body = re.sub('data-src="', 'src="http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl=', body)
+        body = re.sub('data-src="', 'src="http://weibo.eros.pub/noreferer?url=', body)
         item["content"] = body
 
         yield item
