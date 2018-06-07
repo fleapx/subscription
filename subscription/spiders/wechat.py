@@ -56,6 +56,11 @@ class WechatSpider(scrapy.Spider):
                       meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
 
     def parse_article_list(self, response):
+        # 是否需要验证码
+        input = response.xpath('//*[@id="input"]').extract_first()
+        if input is not None:
+            self.logger.error("公众号需要输入验证码")
+            raise Exception("公众号需要输入验证码")
         # 所有文章的div
         body = response.body_as_unicode()
         article_json_str = re.findall("var\s*msgList.+;\s*seajs", body)[0]
