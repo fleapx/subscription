@@ -4,132 +4,72 @@
 	<meta charset="UTF-8">
 	<title>您关注的微博有更新啦</title>
 </head>
-<style type="text/css">
-	a{
-		text-decoration: none;
-		color: #598abf;
-	}
-	a:visited{
-		text-decoration: none;
-		color: #598abf;
-	}
-	img{
-		width: 16px;
-		height: 16px;
-	}
-	.headerimg{
-		border-radius: 50%;
-		display: block;
-		vertical-align: top;
-		width: 34px;
-		height: 34px
-	}
-	.headertitle{
-		height: auto;
-	}
-	.headertitlespan{
-		font-size: 16px;
-		vertical-align:middle;
-		display:block;
-		cursor: pointer;
-	}
-	.headerinfo{
-		height: auto;
-	}
-	.headerinfospan{
-		color: #929292;
-		font-size: 10px;
-		margin-right: 4px;
-		text-align: center;
-		display:block;
-	}
-	.articletext{
-		height: auto;
-	}
-	.articletextp{
-		vertical-align:middle;
-		display:block;
-		margin: 0
-	}
-	.articleimgul{
-		list-style: none;
-		height: auto;
-		margin:0;
-		padding: 0;
-	}
-	.articleimgli{
-		float: left;
-		width: 30%;
-		margin: 5px;
-	    height: 0;
-	    padding-bottom: 30%;
-	    position: relative;
-	}
-	.articleimgimg{
-		position: absolute;
-		display: block;
-		width: 100%!important;
-		height: 100%!important;
-	}
-</style>
 <body style="background-color: #efefef;">
 	<!-- 一个card -->
 	<div style="background-color: #fff;margin: 10px auto;width: 95%; padding: 10px;max-width: 500px">
-		<!-- header -->
-		<div>
-			<!-- 头像 -->
-			<div style="float: left;">
-				<img class="headerimg" src="https://tvax1.sinaimg.cn/crop.0.0.512.512.180/631bcd1aly8fhnsxr9hlvj20e80e8wer.jpg" alt="头像">
-			</div>
-			<div style="float: left; margin-left: 10px">
-				<!-- 昵称 -->
-				<div class="headertitle">
-					<a href="https://m.weibo.cn/u/1662766362?uid=1662766362&luicode=10000011&lfid=1076031662766362&featurecode=20000320" style="color: #000!important">
-						<span class="headertitlespan">刘春</span>
-					</a>
-				</div>
-				<div class="headerinfo"><span class="headerinfospan">2分钟前 来自iPhone 8</span></div>
-			</div>
-			<div style="clear: both;"></div>
-		</div>
-		<div style="margin: 5px">
-			<!-- article -->
-			<div style="padding: 5px 5px;cursor: pointer;">
-				<!-- 原微博 -->
-				<div class="articletext"><p class="articletextp"><a href="aaa" style="color: #000;text-decoration: none">阳阳做的对吧？</a></p></div>
+		<table>
+			<tr><td>
+				<!-- header -->
 				<div>
-					<ul class="articleimgul">
-						<li class="articleimgli">
-							<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
-								<img class="articleimgimg" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
-							</a></li>
-						<li class="articleimgli">
-							<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
-								<img class="articleimgimg" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
-							</a></li>
-						<li class="articleimgli">
-							<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
-								<img class="articleimgimg" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
-							</a></li>
-					</ul>
+					<!-- 头像 -->
+					<div style="float: left;">
+						<img style="border-radius: 50%;display: block;vertical-align: top;width: 34px;height: 34px" src="https://tvax1.sinaimg.cn/crop.0.0.512.512.180/631bcd1aly8fhnsxr9hlvj20e80e8wer.jpg" alt="头像">
+					</div>
+					<div style="float: left; margin-left: 10px">
+						<!-- 昵称 -->
+						<div style="height: auto;">
+							<a href="https://m.weibo.cn/u/1662766362?uid=1662766362&luicode=10000011&lfid=1076031662766362&featurecode=20000320" style="color: #000!important;text-decoration: none;">
+								<span style="font-size: 16px;vertical-align:middle;display:block;cursor: pointer;">刘春</span>
+							</a>
+						</div>
+						<div style="height: auto;"><span style="color: #929292;font-size: 10px;margin-right: 4px;text-align: center;display:block;">2分钟前 来自iPhone 8</span></div>
+					</div>
+					<div style="clear: both;"></div>
 				</div>
-				<div style="clear: both;"></div>
-			</div>
-			<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;">
-				<!-- 转发微博 -->
-				<div class="articletext"><p class="articletextp"><a href="https://m.weibo.cn/u/1280846847?uid=1280846847&luicode=10000011&lfid=1076031662766362&featurecode=20000320">@沈阳晚报</a>:<a href="aaa" style="color: #000;text-decoration: none">【儿媳不满婆婆参加蜜月旅行还指指点点 回国就离婚】阳阳和小军婚后去欧洲度蜜月，因婆婆不放心，于是一同前往。阳阳购物多了，婆婆很不高兴，小军也总是站在母亲一边，但“我婆婆买的也不少，更可气的是，我丈夫这种时候，总帮他妈拿东西，把我扔在后面”。阳阳认为丈夫是个妈宝男，蜜月还没度完，就 ​​​...<a href="/status/4231904083214659">全文</a></a></p></div>
-				<div>
-					<!-- 单一图片显示方式 -->
-					<a href="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg">
-					<img class="articleimgimg" src="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg" style="position: relative!important;width: 90%!important;margin:5px"></a></div>
+			</td></tr>
+			<tr><td>
+				<div style="margin: 5px">
+					<!-- article -->
+					<div style="padding: 5px 5px;cursor: pointer;">
+						<!-- 原微博 -->
+						<div style="height: auto;"><p style="vertical-align:middle;display:block;margin: 0"><a href="aaa" style="color: #000;text-decoration: none">阳阳做的对吧？</a></p></div>
+						<div>
+							<ul style="list-style: none;height: auto;margin:0;padding: 0;">
+								<li style="float: left;width: 30%;margin: 5px;height: 0;padding-bottom: 30%;position: relative;">
+									<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
+										<img style="position: absolute;display: block;width: 100%!important;height: 100%!important;" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
+									</a></li>
+								<li style="float: left;width: 30%;margin: 5px;height: 0;padding-bottom: 30%;position: relative;">
+									<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
+										<img style="position: absolute;display: block;width: 100%!important;height: 100%!important;" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
+									</a></li>
+								<li style="float: left;width: 30%;margin: 5px;height: 0;padding-bottom: 30%;position: relative;">
+									<a href="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg">
+										<img style="position: absolute;display: block;width: 100%!important;height: 100%!important;" src="http://wx4.sinaimg.cn/thumb180/007487hqly1fqmcg08kf8j30v90iotb3.jpg" alt="img">
+									</a></li>
+							</ul>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+					<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;">
+						<!-- 转发微博 -->
+						<div style="height: auto;"><p style="vertical-align:middle;display:block;margin: 0"><a style="text-decoration: none;color: #598abf;" href="https://m.weibo.cn/u/1280846847?uid=1280846847&luicode=10000011&lfid=1076031662766362&featurecode=20000320">@沈阳晚报</a>:<a href="aaa" style="color: #000;text-decoration: none">【儿媳不满婆婆参加蜜月旅行还指指点点 回国就离婚】阳阳和小军婚后去欧洲度蜜月，因婆婆不放心，于是一同前往。阳阳购物多了，婆婆很不高兴，小军也总是站在母亲一边，但“我婆婆买的也不少，更可气的是，我丈夫这种时候，总帮他妈拿东西，把我扔在后面”。阳阳认为丈夫是个妈宝男，蜜月还没度完，就 ​​​...<a href="/status/4231904083214659">全文</a></a></p></div>
+						<div>
+							<!-- 单一图片显示方式 -->
+							<a href="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg">
+							<img src="http://wx4.sinaimg.cn/bmiddle/4c582bffly1fqmcke2ncuj20dt0exjsz.jpg" style="position: relative!important;display: block;width: 100%!important;height: 100%!important;margin:5px"></a></div>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
 				</div>
-				<div style="clear: both;"></div>
-			</div>
-		</div>
+			</td></tr>
+		</table>
 	</div>
 	<div><span style="display: block;text-align: center;margin-top: 10px">Powered by <a href="http://eros.pub">eros.pub</a></span></div>
 <!--<span style="color: #598abf;">test</span>-->
 </body>
 </html>
+
+
 
 

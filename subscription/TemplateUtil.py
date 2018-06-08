@@ -4,61 +4,6 @@ import re
 
 def get_weibo_template(data):
     result = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>您关注的微博有更新啦</title></head>' \
-             '<style type="text/css">' \
-             'a{' \
-             'text-decoration: none;' \
-             'color: #598abf;}' \
-             'a:visited{' \
-             'text-decoration: none;' \
-             'color: #598abf;}' \
-             'img{' \
-             'width: 16px;' \
-             'height: 16px;}' \
-             '.headerimg{' \
-             'border-radius: 50%%;' \
-             'display: block;' \
-             'vertical-align: top;' \
-             'width: 34px;' \
-             'height: 34px}' \
-             '.headertitle{' \
-             'height: auto;}' \
-             '.headertitlespan{' \
-             'font-size: 16px;' \
-             'vertical-align:middle;' \
-             'display:block;' \
-             'cursor: pointer;}' \
-             '.headerinfo{' \
-             'height: auto;}' \
-             '.headerinfospan{' \
-             'color: #929292;' \
-             'font-size: 10px;' \
-             'margin-right: 4px;' \
-             'text-align: center;' \
-             'display:block;}' \
-             '.articletext{' \
-             'height: auto;}' \
-             '.articletextp{' \
-             'vertical-align:middle;' \
-             'display:block;' \
-             'margin: 0}' \
-             '.articleimgul{' \
-             'list-style: none;' \
-             'height: auto;' \
-             'margin:0;' \
-             'padding: 0;}' \
-             '.articleimgli{' \
-             'float: left;' \
-             'width: 30%;' \
-             'margin: 5px;' \
-             'height: 0;' \
-             'padding-bottom: 15%;' \
-             'position: relative;}' \
-             '.articleimgimg{' \
-             'width: 100%!important;' \
-             'height: 100%!important;' \
-             'position: absolute;' \
-             'display: block;}' \
-             '</style>' \
              '<body style="background-color: #efefef;">'
     for post in data:
         # 头像
@@ -82,14 +27,16 @@ def get_weibo_template(data):
         lis = ''
         # 存在多张图片
         if (pics is not None) and (len(pics) > 1):
-            lis = '<ul class="articleimgul">'
+            lis = '<ul style="list-style: none;height: auto;margin:0;padding: 0;">'
             for pic in pics:
                 if pic.get('large', None) is None:
                     pic_url = pic.get('url', None)
                 else:
                     pic_url = pic.get('large', None).get('url', None)
 
-                li = '<li class="articleimgli"><a href="%s"><img class="articleimgimg" src="%s" alt="img"></a></li>' \
+                li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;padding-bottom: 30%%;position: ' \
+                     'relative;"><a href="%s"><img style="position: absolute;display: block;width: 100%%!important;' \
+                     'height: 100%%!important;" src="%s" alt="img"></a></li>' \
                      % (pic_url, pic_url)
                 lis = lis + li
             lis = lis + '</ul>'
@@ -100,8 +47,8 @@ def get_weibo_template(data):
             else:
                 pic_url = pics[0].get('large', None).get('url', None)
 
-            lis = '<a href="%s"><img class="articleimgimg" src="%s" style="position: relative!important;' \
-                  'width: 90%%!important;margin:5px"></a>' % (pic_url, pic_url)
+            lis = '<a href="%s"><img src="%s" style="position: relative!important;display: block;' \
+                  'width: 90%%!important;height: 90%%!important;margin:5px"></a>' % (pic_url, pic_url)
 
         # 转发微博
         retweeted_status = post.get('mblog', None).get('retweeted_status', None)
@@ -128,14 +75,16 @@ def get_weibo_template(data):
             retweeted_status_lis = ''
             # 存在多张图片
             if (retweeted_status_pics is not None) and (len(retweeted_status_pics) > 1):
-                retweeted_status_lis = '<ul class="articleimgul">'
+                retweeted_status_lis = '<ul style="list-style: none;height: auto;margin:0;padding: 0;">'
                 for retweeted_status_pic in retweeted_status_pics:
                     if retweeted_status_pic.get('large', None) is None:
                         pic_url = retweeted_status_pic.get('url', None)
                     else:
                         pic_url = retweeted_status_pic.get('large', None).get('url', None)
 
-                    retweeted_status_li = '<li class="articleimgli"><a href="%s"><img class="articleimgimg" ' \
+                    retweeted_status_li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;padding-bottom:' \
+                                          ' 30%%;position: relative;"><a href="%s"><img style="position: absolute;' \
+                                          'display: block;width: 100%%!important;height: 100%%!important;" ' \
                                           'src="%s" alt="img"></a></li>' % (pic_url, pic_url)
                     retweeted_status_lis = retweeted_status_lis + retweeted_status_li
                 retweeted_status_lis = retweeted_status_lis + '</ul>'
@@ -145,28 +94,40 @@ def get_weibo_template(data):
                     pic_url = retweeted_status_pics[0].get('url', None)
                 else:
                     pic_url = retweeted_status_pics[0].get('large', None).get('url', None)
-                retweeted_status_lis = '<a href="%s"><img class="articleimgimg" src="%s" ' \
-                                       'style="position: relative!important;' \
-                                       'width: 90%%!important;margin:5px"></a>' \
+                retweeted_status_lis = '<a href="%s"><img src="%s" ' \
+                                       'style="position: relative!important;display: block;width: 90%%' \
+                                       '!important;height: 100%%!important;margin:5px"></a>' \
                                        % (pic_url, pic_url)
 
             # 拼接后的完整被转发的微博
             retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" >' \
-                                    '<div class="articletext"><p class="articletextp"><a href="%s">' \
+                                    '<div style="height: auto;"><p style="vertical-align:middle;display:' \
+                                    'block;margin: 0"><a style="text-decoration: none;color: #598abf;" href="%s">' \
                                     '%s</a>:<a href="%s" style="color: #000;text-decoration:none">%s' \
-                                    '</a></p></div><div class="articleimg">' \
+                                    '</a></p></div><div>' \
                                     '%s</div><div style="clear: both;"></div></div>' \
                                     % (retweeted_profile_url, retweeted_screen_name, retweeted_scheme,
                                        retweeted_status_text, retweeted_status_lis)
 
         card_html = '<div style="background-color: #fff;margin: 10px auto;width: 95%%; padding: 10px;max-width: 500px">' \
-                    '<div><div style="float: left;"><img class="headerimg" src="%s" alt="头像"></div>' \
-                    '<div style="float: left; margin-left: 10px"><div class="headertitle"><a href="%s" style="color: #000!important">' \
-                    '<span class="headertitlespan">%s</span></a></div><div class="headerinfo"><span class="headerinfospan">%s</span></div>' \
-                    '</div><div style="clear: both;"></div></div><div style="margin: 5px"><div style="padding: 5px 5px;cursor: pointer;"' \
-                    '<div class="articletext"><p class="articletextp"><a href="%s" style="color: #000;text-decoration: none">%s</a></p></div>' \
-                    '<div class="articleimg">%s' \
-                    '</div><div style="clear: both;"></div></div>%s</div></div>' \
+                    '<table><tr><td><div>' \
+                    '<div style="float: left;">' \
+                    '<img style="border-radius: 50%%;display: block;vertical-align: top;width: 34px;height: 34px" src="%s" alt="头像">' \
+                    '</div>' \
+                    '<div style="float: left; margin-left: 10px">' \
+                    '<div style="height: auto;">' \
+                    '<a href="%s" style="color: #000!important;text-decoration: none;">' \
+                    '<span style="font-size: 16px;vertical-align:middle;display:block;cursor: pointer;">%s</span></a>' \
+                    '</div>' \
+                    '<div style="height: auto;>' \
+                    '<span style="color: #929292;font-size: 10px;margin-right: 4px;text-align: center;display:block;">%s</span>' \
+                    '</div></div><div style="clear: both;"></div></div></td></tr>' \
+                    '<tr><td><div style="margin: 5px">' \
+                    '<div style="padding: 5px 5px;cursor: pointer;">' \
+                    '<div style="height: auto;">' \
+                    '<p style="vertical-align:middle;display:block;margin: 0">' \
+                    '<a href="%s" style="color: #000;text-decoration: none">%s</a></p></div>' \
+                    '<div>%s</div><div style="clear: both;"></div></div>%s</div></td></tr></table></div>' \
                     % (profile_image_url, profile__url, screen_name, user_info, scheme, text, lis,
                        retweeted_status_html)
         result = result + card_html
@@ -188,7 +149,7 @@ def replace_a_to_span( text):
 def get_wechat_template(data):
     html = '<!DOCTYPE html><html><head><title>wechat</title><meta name="referrer" content="never">' \
            '</head><body><div style="background-color: #fff;margin: 10px auto;width: ' \
-           '95%; padding: 10px;max-width: 500px">'
+           '95%; padding: 10px;max-width: 700px">'
     for article in data:
         html += '<h2>%s</h2>' \
                 '<div>' \
