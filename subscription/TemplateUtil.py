@@ -21,6 +21,7 @@ def get_weibo_template(data):
         scheme = post.get('scheme', None)
         # 微博原文（将a标签全部替换为span）
         text = replace_a_to_span(post.get('mblog', None).get('text', None))
+        # text = re.sub("<img", "<img style='width:16px!important;height:16px!important'", text)
         # 图片
         pics = post.get('mblog', None).get('pics', None)
         lis = ''
@@ -34,8 +35,8 @@ def get_weibo_template(data):
                     pic_url = pic.get('large', None).get('url', None)
 
                 li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;padding-bottom: 30%%;position: ' \
-                     'relative;"><a href="%s"><img style="position: absolute;display: block;width: 100%%!important;' \
-                     'height: 100%%!important;" src="%s" alt="img"></a></li>' \
+                     'relative;overflow:hidden"><a href="%s"><img style="position: absolute;display: block;' \
+                     'width: 100%%!important;" src="%s" alt="img"></a></li>' \
                      % (pic_url, pic_url)
                 lis = lis + li
             lis = lis + '</ul>'
@@ -69,6 +70,7 @@ def get_weibo_template(data):
 
             # 被转发微博正文(将a标签全部替换为span）
             retweeted_status_text = replace_a_to_span(retweeted_status.get('text', None))
+            # retweeted_status_text = re.sub("<img", "<img style='width:16px!important;height:16px!important'", retweeted_status_text)
             # 图片
             retweeted_status_pics = retweeted_status.get('pics', None)
             retweeted_status_lis = ''
@@ -82,8 +84,8 @@ def get_weibo_template(data):
                         pic_url = retweeted_status_pic.get('large', None).get('url', None)
 
                     retweeted_status_li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;padding-bottom:' \
-                                          ' 30%%;position: relative;"><a href="%s"><img style="position: absolute;' \
-                                          'display: block;width: 100%%!important;height: 100%%!important;" ' \
+                                          ' 30%%;position: relative;overflow:hidden;"><a href="%s"><img style="' \
+                                          'position: absolute;display: block;width: 100%%!important;" ' \
                                           'src="%s" alt="img"></a></li>' % (pic_url, pic_url)
                     retweeted_status_lis = retweeted_status_lis + retweeted_status_li
                 retweeted_status_lis = retweeted_status_lis + '</ul>'
@@ -116,10 +118,11 @@ def get_weibo_template(data):
                     '<div style="float: left; margin-left: 10px">' \
                     '<div style="height: auto;">' \
                     '<a href="%s" style="color: #000!important;text-decoration: none;">' \
-                    '<span style="font-size: 1em;vertical-align:middle;display:block;cursor: pointer;">%s</span></a>' \
+                    '<span style="font-size: 16px;vertical-align:middle;display:block;cursor: pointer;">%s</span></a>' \
                     '</div>' \
                     '<div style="height: auto;>' \
-                    '<span style="color: #929292;font-size: 0.5em;margin-right: 4px;text-align: center;display:block;">%s</span>' \
+                    '<a href="" style="color: #929292;text-decoration: none;">' \
+                    '<span style="font-size: 10px;text-align: center;display:block;">%s</span></a>' \
                     '</div></div><div style="clear: both;"></div></div></td></tr>' \
                     '<tr><td><div style="margin: 5px">' \
                     '<div style="padding: 5px 5px;cursor: pointer;">' \
