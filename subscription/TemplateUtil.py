@@ -3,8 +3,7 @@ import re
 
 
 def get_weibo_template(data):
-    result = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>您关注的微博有更新啦</title></head>' \
-             '<body style="background-color: #efefef;">'
+    result = '<div style="background-color: #efefef;width: 95%;max-width: 500px;margin: 0 auto;padding: 10px 10px">'
     for post in data:
         # 头像
         profile_image_url = post.get('mblog', None).get('user', None).get('profile_image_url', None)
@@ -109,7 +108,7 @@ def get_weibo_template(data):
                                     % (retweeted_profile_url, retweeted_screen_name, retweeted_scheme,
                                        retweeted_status_text, retweeted_status_lis)
 
-        card_html = '<div style="background-color: #fff;margin: 10px auto;width: 95%%; padding: 10px;max-width: 500px">' \
+        card_html = '<div style="background-color: #fff;margin: 10px auto; padding: 10px;">' \
                     '<table><tr><td><div>' \
                     '<div style="float: left;">' \
                     '<img style="border-radius: 50%%;display: block;vertical-align: top;width: 34px;height: 34px" src="%s" alt="头像">' \
@@ -117,10 +116,10 @@ def get_weibo_template(data):
                     '<div style="float: left; margin-left: 10px">' \
                     '<div style="height: auto;">' \
                     '<a href="%s" style="color: #000!important;text-decoration: none;">' \
-                    '<span style="font-size: 16px;vertical-align:middle;display:block;cursor: pointer;">%s</span></a>' \
+                    '<span style="font-size: 1em;vertical-align:middle;display:block;cursor: pointer;">%s</span></a>' \
                     '</div>' \
                     '<div style="height: auto;>' \
-                    '<span style="color: #929292;font-size: 10px;margin-right: 4px;text-align: center;display:block;">%s</span>' \
+                    '<span style="color: #929292;font-size: 0.5em;margin-right: 4px;text-align: center;display:block;">%s</span>' \
                     '</div></div><div style="clear: both;"></div></div></td></tr>' \
                     '<tr><td><div style="margin: 5px">' \
                     '<div style="padding: 5px 5px;cursor: pointer;">' \
@@ -158,5 +157,5 @@ def get_wechat_template(data):
                 (article['title'], article['author'], time.strftime("%Y-%m-%d %H:%M:%S",
                             time.localtime(article['datetime'])), article['content'])
 
-    html += '</body></html>'
+    html += '</div>'
     return html
