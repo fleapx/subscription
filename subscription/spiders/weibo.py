@@ -8,6 +8,7 @@ import time
 from subscription.items import WeiboItem
 import re
 import requests
+from subscription.Logger import Logger
 
 
 class WeiboSpider(scrapy.Spider):
@@ -45,12 +46,12 @@ class WeiboSpider(scrapy.Spider):
         response_json = json.loads(response.body_as_unicode())
 
         if response_json['ok'] is not 1:
-            self.logger.info('响应code异常，返回的response：%s，用户：%s' % (response.body_as_unicode(), name))
+            Logger("log.log").info('响应code异常，返回的response：%s，用户：%s' % (response.body_as_unicode(), name))
             return
 
         # 迭代微博列表
         data = response_json['data']
-        self.logger.debug('获取到的微博个数：%s' % len(data['cards']))
+        Logger("log.log").debug('获取到的微博个数：%s' % len(data['cards']))
         for card in data['cards']:
             # 判断是否是微博,card_type为9是微博
             if card['card_type'] is 9:
@@ -75,7 +76,7 @@ class WeiboSpider(scrapy.Spider):
                 yield item
 
             else:
-                self.logger.debug('card_type不为9')
+                Logger("log.log").debug('card_type不为9')
 
 
 def get_full_text(text):

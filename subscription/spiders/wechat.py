@@ -7,6 +7,8 @@ from subscription.items import WechatItem
 import re
 import json
 from subscription import settings
+from subscription.Logger import Logger
+from subscription.MailTool import send_warning
 
 
 class WechatSpider(scrapy.Spider):
@@ -59,8 +61,10 @@ class WechatSpider(scrapy.Spider):
         # 是否需要验证码
         input = response.xpath('//*[@id="input"]').extract_first()
         if input is not None:
-            self.logger.error("公众号需要输入验证码")
-            raise Exception("公众号需要输入验证码")
+            Logger("log.log").error("公众号需要验证码")
+            send_warning("公众号需要验证码,url:%s" % response.url)
+            return
+
         # 所有文章的div
         body = response.body_as_unicode()
         article_json_str = re.findall("var\s*msgList.+;\s*seajs", body)[0]

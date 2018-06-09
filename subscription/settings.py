@@ -25,29 +25,24 @@ MYSQL_USER_PSD = 'rootrootroot'
 
 
 # 发送邮件相关配置
-MAIL_FROM = '1029109455@qq.com'
-MAIL_USER = '1029109455@qq.com'
-MAIL_PASS = 'ropctotsmqsubehi'
-MAIL_HOST = 'smtp.qq.com'
-MAIL_PORT = 465
-MAIL_TO = 'zhangwenl1993@126.com'
+MAIL_FROM = ''
+MAIL_USER = ''
+MAIL_PASS = ''
+MAIL_HOST = ''
+MAIL_PORT =
+MAIL_TO = ''
 # send_flag字段值，表明该微博是否已经发送过邮件
 MAIL_SEND = 0
 MAIL_NOT_SEND = 1
 
 # 爬虫设置
-
+LOG_FILE = "scrapy_log.log"
+LOG_LEVEL = "ERROR"
 ROBOTSTXT_OBEY = False
-
 COOKIES_ENABLED = False
-
 ITEM_PIPELINES = {
    'subscription.pipelines.WeiboPipeline': 300,
    'subscription.pipelines.WechatPipeline': 301,
-}
-
-DOWNLOADER_MIDDLEWARES = {
-    'subscription.middlewares.HandleException': 543,
 }
 
 # 允许缓存
