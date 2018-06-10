@@ -111,7 +111,7 @@ def get_weibo_template(data):
                                        retweeted_status_text, retweeted_status_lis)
 
         card_html = '<div style="background-color: #fff;margin: 10px auto; padding: 10px;">' \
-                    '<table><tr><td><div>' \
+                    '<table style="width: 100%%"><tr><td style="width: 100%%"><div>' \
                     '<div style="float: left;">' \
                     '<img style="border-radius: 50%%;display: block;vertical-align: top;width: 34px;height: 34px;' \
                     'margin-top: 2px" src="%s" alt="头像">' \
@@ -125,7 +125,7 @@ def get_weibo_template(data):
                     '<a href="" style="color: #929292;text-decoration: none;">' \
                     '<span style="font-size: 10px;text-align: center;display:block;">%s</span></a>' \
                     '</div></div><div style="clear: both;"></div></div></td></tr>' \
-                    '<tr><td><div style="margin: 5px">' \
+                    '<tr><td style="width: 100%%"><div style="margin: 5px">' \
                     '<div style="padding: 5px 5px;cursor: pointer;">' \
                     '<div style="height: auto;">' \
                     '<p style="vertical-align:middle;display:block;margin: 0">' \
