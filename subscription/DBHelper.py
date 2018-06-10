@@ -1,4 +1,5 @@
 import pymongo
+import json
 from subscription import settings
 import pymysql
 from subscription.items import WeiboSubscription
@@ -8,8 +9,8 @@ from subscription.items import WechatSubscription
 class WeiboMongoDao(object):
     def __init__(self):
         self.client = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)
-        # self.db_auth = self.client.admin
-        # self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
+        self.db_auth = self.client.admin
+        self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
         self.db = self.client[settings.MONGO_DB_NAME]
         self.collection = self.db[settings.MONGO_WEIBO_COLLECTION_NAME]
 
@@ -24,12 +25,19 @@ class WeiboMongoDao(object):
             result.append(c)
         return result
 
+    def insert_one(self, item):
+        weibo_json = json.loads(item['json'])
+        inserted = self.collection.find_one({'itemid': weibo_json['itemid']})
+
+        if inserted is None:
+            self.collection.insert_one(weibo_json)
+
 
 class WechatMongoDao(object):
     def __init__(self):
         self.client = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)
-        # self.db_auth = self.client.admin
-        # self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
+        self.db_auth = self.client.admin
+        self.db_auth.authenticate(settings.MONGO_USERNAME, settings.MONGO_PSD)
         self.db = self.client[settings.MONGO_DB_NAME]
         self.collection = self.db[settings.MONGO_WECHAT_COLLECTION_NAME]
 
@@ -47,6 +55,12 @@ class WechatMongoDao(object):
     def find_wechat_by_id(self, id):
         document = self.collection.find_one({'_id': id})
         return document
+
+    def insert_one(self, item):
+        inserted = self.collection.find_one({'_id': item['_id']})
+
+        if inserted is None:
+            self.collection.insert_one(item)
 
 
 class SubscriptionDao(object):
