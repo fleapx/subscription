@@ -29,7 +29,7 @@ MAIL_FROM = ''
 MAIL_USER = ''
 MAIL_PASS = ''
 MAIL_HOST = ''
-MAIL_PORT =
+MAIL_PORT = 465
 MAIL_TO = ''
 # send_flag字段值，表明该微博是否已经发送过邮件
 MAIL_SEND = 0
@@ -44,12 +44,3 @@ ITEM_PIPELINES = {
    'subscription.pipelines.WeiboPipeline': 300,
    'subscription.pipelines.WechatPipeline': 301,
 }
-
-# 允许缓存
-# HTTPCACHE_ENABLED = True
-# 缓存过期时间/秒,为0永不过期
-# HTTPCACHE_EXPIRATION_SECS = 0
-# # 缓存目录
-# HTTPCACHE_DIR = 'httpcache'
-# HTTPCACHE_IGNORE_HTTP_CODES = []
-# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
