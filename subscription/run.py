@@ -34,7 +34,10 @@ schedule.every().day.at("20:00").do(run_threading, crawl_wechat)
 
 schedule.every().day.at("6:50").do(run_threading, send_weibo)
 schedule.every().day.at("11:30").do(run_threading, send_weibo)
-schedule.every().day.at("7:00").do(run_threading, send_weibo)
+schedule.every().day.at("19:00").do(run_threading, send_weibo)
+schedule.every().day.at("20:00").do(run_threading, send_weibo)
+schedule.every().day.at("21:00").do(run_threading, send_weibo)
+schedule.every().day.at("23:00").do(run_threading, send_weibo)
 
 schedule.every().day.at("20:30").do(run_threading, send_wechat)
 
