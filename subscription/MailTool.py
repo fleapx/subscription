@@ -21,7 +21,7 @@ def send_weibo():
     try:
         html = TemplateUtil.get_weibo_template(data)
         send_mail("您关注的微博有更新啦", html, settings.MAIL_TO)
-        logger.info('邮件发送成功，from：%s to：%s' % (settings.MAIL_FROM, settings.MAIL_TO))
+        logger.info('邮件发送成功，from：%s to：%s %s' % (settings.MAIL_FROM, settings.MAIL_TO, "微博"))
         # 将发送的微博标记为已发送
         for weibo in data:
             weibo['send_flag'] = settings.MAIL_SEND
@@ -45,7 +45,7 @@ def send_wechat():
     try:
         html = TemplateUtil.get_wechat_template(data)
         send_mail("您关注的公众号有更新啦", html, settings.MAIL_TO)
-        logger.info('邮件发送成功，from：%s to：%s' % (settings.MAIL_FROM, settings.MAIL_TO))
+        logger.info('邮件发送成功，from：%s to：%s %s' % (settings.MAIL_FROM, settings.MAIL_TO, "公众号"))
         for wechat in data:
             wechat['send_flag'] = settings.MAIL_SEND
         mongo_dao.update_post_many(data)
