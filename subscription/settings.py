@@ -25,10 +25,10 @@ MYSQL_USER_PSD = 'rootrootroot'
 
 
 # 发送邮件相关配置
-MAIL_FROM = ''
+MAIL_FROM = '1'
 MAIL_USER = ''
 MAIL_PASS = ''
-MAIL_HOST = ''
+MAIL_HOST = 'smtp.qq.com'
 MAIL_PORT = 465
 MAIL_TO = ''
 # send_flag字段值，表明该微博是否已经发送过邮件
@@ -44,3 +44,9 @@ ITEM_PIPELINES = {
    'subscription.pipelines.WeiboPipeline': 300,
    'subscription.pipelines.WechatPipeline': 301,
 }
+
+# 打码平台
+RK_USER = ""
+RK_PASS = ""
+RK_ID = ""
+RK_KEY = ""
