@@ -9,6 +9,7 @@ import json
 from subscription import settings
 from subscription.Logger import Logger
 from subscription.MailTool import send_warning
+from subscription.kaptcha.antiWeixinKaptcha import verify_weixin_kaptcha
 
 
 class WechatSpider(scrapy.Spider):
@@ -37,7 +38,7 @@ class WechatSpider(scrapy.Spider):
     }
 
     custom_settings = {
-        "DOWNLOAD_DELAY": 15,
+        "DOWNLOAD_DELAY": 10,
         "RANDOMIZE_DOWNLOAD_DELAY": True
     }
 
@@ -53,6 +54,12 @@ class WechatSpider(scrapy.Spider):
                           meta={"num": num, "name": name})
 
     def parse(self, response):
+        input = response.xpath('//*[@id="seccodeInput"]').extract_first()
+        if input is not None:
+            self.logger.debug("需要验证码")
+            send_warning("公众号需要验证码,url:%s" % response.url)
+            return
+
         home_url = response.xpath('//*[@id="sogou_vr_11002301_box_0"]/div/div[2]/p[1]/a/@href').extract_first()
         yield Request(home_url, callback=self.parse_article_list,
                       meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
@@ -61,8 +68,17 @@ class WechatSpider(scrapy.Spider):
         # 是否需要验证码
         input = response.xpath('//*[@id="input"]').extract_first()
         if input is not None:
-            Logger("log.log").error("公众号需要验证码")
-            send_warning("公众号需要验证码,url:%s" % response.url)
+            for i in range(5):
+                result = verify_weixin_kaptcha(response.url)
+                if result:
+                    # 识别成功
+                    self.logger.info("验证码识别成功")
+                    # 重新发送请求
+                    return Request(response.url, callback=self.parse_article_list, dont_filter=True,
+                                  meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
+
+            Logger("log.log").error("验证码输入多次仍然失败，url:%s" % response.url)
+            send_warning("验证码输入多次仍然失败,url:%s" % response.url)
             return
 
         # 所有文章的div
