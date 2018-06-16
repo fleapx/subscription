@@ -74,8 +74,9 @@ class WechatSpider(scrapy.Spider):
                     # 识别成功
                     Logger("log.log").info("验证码识别成功")
                     # 重新发送请求
-                    return Request(response.url, callback=self.parse_article_list, dont_filter=True,
+                    yield Request(response.url, callback=self.parse_article_list, dont_filter=True,
                                   meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
+                    return
 
             Logger("log.log").error("验证码输入多次仍然失败，url:%s" % response.url)
             send_warning("验证码输入多次仍然失败,url:%s" % response.url)
@@ -99,15 +100,38 @@ class WechatSpider(scrapy.Spider):
             item['send_flag'] = settings.MAIL_NOT_SEND
             item['wechat_num'] = response.meta.get("num", None)
 
-            # 判断是否爬取过该文章
-            mongo_dao = WechatMongoDao()
-            document = mongo_dao.find_wechat_by_id(item["_id"])
-            if document is None:
-                yield Request(content_url, callback=self.parse_article, headers=self.article_headers, meta={"item": item})
+            # 只爬取原创文章
+            if article_info["app_msg_ext_info"]["copyright_stat"] == 11:
+                # 判断是否爬取过该文章
+                mongo_dao = WechatMongoDao()
+                document = mongo_dao.find_wechat_by_id(item["_id"])
+                if document is None:
+                    yield Request(content_url, callback=self.parse_article, headers=self.article_headers, meta={"item": item})
+
+            # 爬取额外的文章
+            multi_msg_list = article_info["app_msg_ext_info"].get("multi_app_msg_item_list", None)
+            if multi_msg_list is not None:
+                for multi_msg in multi_msg_list:
+                    multi_item = WechatItem()
+                    multi_item["_id"] = multi_msg['fileid']
+                    multi_item['title'] = multi_msg['title']
+                    multi_item['author'] = multi_msg['author']
+                    multi_content_url = 'https://mp.weixin.qq.com' + multi_msg['content_url']
+                    multi_content_url = re.sub('amp;', '', multi_content_url)
+                    multi_item['content_url'] = multi_content_url
+                    multi_item['datetime'] = article_info['comm_msg_info']['datetime']
+                    multi_item['send_flag'] = settings.MAIL_NOT_SEND
+                    multi_item['wechat_num'] = response.meta.get("num", None)
+
+                    if multi_msg["copyright_stat"] == 11:
+                        multi_document = mongo_dao.find_wechat_by_id(multi_item["_id"])
+                        if multi_document is None:
+                            yield Request(multi_content_url, callback=self.parse_article, headers=self.article_headers,
+                                          meta={"item": multi_item})
 
     def parse_article(self, response):
         item = response.meta.get("item", None)
-        body = response.xpath('//*[@id="img-content"]/div[2]').extract_first()
+        body = response.xpath('//*[@id="img-content"]').extract_first()
         # 去除所有js标签
         body = re.sub("<script[\S\s]+?</script>", "", body)
         # 修改图片src

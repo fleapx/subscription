@@ -153,12 +153,7 @@ def get_wechat_template(data):
     html = '<div style="background-color: #fff;margin: 10px auto;width: ' \
            '95%; padding: 10px;max-width: 700px">'
     for article in data:
-        html += '<h2>%s</h2>' \
-                '<div>' \
-                '<span style="margin:0px 10px;color: #B2B2B2">%s</span><span style="color: #B2B2B2">%s</span>' \
-                '</div>%s' % \
-                (article['title'], article['author'], time.strftime("%Y-%m-%d %H:%M:%S",
-                            time.localtime(article['datetime'])), article['content'])
+        html += article['content']
 
     html += '</div>'
     return html
