@@ -64,20 +64,20 @@ class WeiboSpider(scrapy.Spider):
                 mblog['created_at'] = int(time.time())
 
                 # 加载微博原文
-                urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', mblog['text'])
+                urls = re.findall("\\.\\.\\.全文$", mblog['text'])
 
                 retweed_urls = None
                 retweed_status = mblog.get('retweeted_status', None)
                 if retweed_status is not None:
-                    retweed_urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', retweed_status['text'])
+                    retweed_urls = re.findall("\\.\\.\\.全文$", retweed_status['text'])
 
                 if len(urls) is 1:
-                    full_text_url = 'https://m.weibo.cn%s' % urls[0]
+                    full_text_url = 'https://m.weibo.cn/status/%s' % mblog["id"]
                     yield Request(full_text_url, callback=self.parse_full_text, headers=self.headers,
                                   meta={"json": card, "type": 1})
 
                 elif retweed_urls is not None and len(retweed_urls) is 1:
-                    full_text_url = 'https://m.weibo.cn%s' % retweed_urls[0]
+                    full_text_url = 'https://m.weibo.cn/status/%s' % retweed_status["id"]
                     yield Request(full_text_url, callback=self.parse_full_text, headers=self.headers,
                                   meta={"json": card, "type": 2})
 
@@ -93,15 +93,19 @@ class WeiboSpider(scrapy.Spider):
         card_json = response.meta.get("json", None)
         mblog = card_json['mblog']
         type = response.meta.get("type", None)
-        full_text = re.findall('.*"text": "(.+)",.*', response.body_as_unicode())[0]
 
-        if type == 1:
-            # 微博原文
-            mblog['text'] = full_text
-        else:
-            # 转发微博原文
-            retweed_status = mblog['retweeted_status']
-            retweed_status['text'] = full_text
+        all_text = re.findall('.*"text": "(.+)",.*', response.body_as_unicode())
+
+        if len(all_text) is not 0:
+            full_text = all_text[0]
+
+            if type == 1:
+                # 微博原文
+                mblog['text'] = full_text
+            else:
+                # 转发微博原文
+                retweed_status = mblog['retweeted_status']
+                retweed_status['text'] = full_text
 
         item = WeiboItem()
         item['json'] = json.dumps(card_json)
