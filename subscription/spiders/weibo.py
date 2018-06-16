@@ -64,36 +64,48 @@ class WeiboSpider(scrapy.Spider):
                 mblog['created_at'] = int(time.time())
 
                 # 加载微博原文
-                mblog['text'] = get_full_text(mblog['text'])
+                urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', mblog['text'])
 
-                # 加载转发微博原文
+                retweed_urls = None
                 retweed_status = mblog.get('retweeted_status', None)
                 if retweed_status is not None:
-                    retweed_status['text'] = get_full_text(retweed_status['text'])
+                    retweed_urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', retweed_status['text'])
 
-                item = WeiboItem()
-                item['json'] = json.dumps(card)
-                yield item
+                if len(urls) is 1:
+                    full_text_url = 'https://m.weibo.cn%s' % urls[0]
+                    yield Request(full_text_url, callback=self.parse_full_text, headers=self.headers,
+                                  meta={"json": card, "type": 1})
+
+                elif retweed_urls is not None and len(retweed_urls) is 1:
+                    full_text_url = 'https://m.weibo.cn%s' % retweed_urls[0]
+                    yield Request(full_text_url, callback=self.parse_full_text, headers=self.headers,
+                                  meta={"json": card, "type": 2})
+
+                else:
+                    item = WeiboItem()
+                    item['json'] = json.dumps(card)
+                    yield item
 
             else:
                 Logger("log.log").debug('card_type不为9')
 
+    def parse_full_text(self, response):
+        card_json = response.meta.get("json", None)
+        mblog = card_json['mblog']
+        type = response.meta.get("type", None)
+        full_text = re.findall('.*"text": "(.+)",.*', response.body_as_unicode())[0]
 
-def get_full_text(text):
-    # 通过正则表达式判断是否包含全文链接
-    urls = re.findall('<a href="(\/.+\/.+)">全文<\/a>', text)
-    if len(urls) is 1:
-        full_text_url = 'https://m.weibo.cn%s' % urls[0]
+        if type == 1:
+            # 微博原文
+            mblog['text'] = full_text
+        else:
+            # 转发微博原文
+            retweed_status = mblog['retweeted_status']
+            retweed_status['text'] = full_text
 
-        headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, '
-                                 'like Gecko) Chrome/19.0.1036.7 Safari/535.20'}
-
-        html_text = requests.get(full_text_url, headers=headers).text
-
-        # 根据正则表达式获取微博正文
-        text = re.findall('.*"text": "(.+)",.*', html_text)[0]
-
-    return text
+        item = WeiboItem()
+        item['json'] = json.dumps(card_json)
+        yield item
 
 
 def get_weibo_list_url(uid):
