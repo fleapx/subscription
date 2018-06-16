@@ -56,7 +56,7 @@ class WechatSpider(scrapy.Spider):
     def parse(self, response):
         input = response.xpath('//*[@id="seccodeInput"]').extract_first()
         if input is not None:
-            self.logger.debug("需要验证码")
+            Logger("log.log").error("需要验证码")
             send_warning("公众号需要验证码,url:%s" % response.url)
             return
 
@@ -72,7 +72,7 @@ class WechatSpider(scrapy.Spider):
                 result = verify_weixin_kaptcha(response.url)
                 if result:
                     # 识别成功
-                    self.logger.info("验证码识别成功")
+                    Logger("log.log").info("验证码识别成功")
                     # 重新发送请求
                     return Request(response.url, callback=self.parse_article_list, dont_filter=True,
                                   meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
