@@ -124,6 +124,7 @@ class WechatSpider(scrapy.Spider):
                     multi_item['wechat_num'] = response.meta.get("num", None)
 
                     if multi_msg["copyright_stat"] == 11:
+                        mongo_dao = WechatMongoDao()
                         multi_document = mongo_dao.find_wechat_by_id(multi_item["_id"])
                         if multi_document is None:
                             yield Request(multi_content_url, callback=self.parse_article, headers=self.article_headers,
