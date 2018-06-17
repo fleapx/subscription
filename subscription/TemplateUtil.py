@@ -21,6 +21,7 @@ def get_weibo_template(data):
         scheme = post.get('scheme', None)
         # 微博原文（将a标签全部替换为span）
         text = replace_a_to_span(post.get('mblog', None).get('text', None))
+        text = re.sub("(?<=>)<img.+?>", "", text)
         text = re.sub("<img.+?>", "[图片]", text)
         # 图片
         pics = post.get('mblog', None).get('pics', None)
@@ -70,6 +71,7 @@ def get_weibo_template(data):
 
             # 被转发微博正文(将a标签全部替换为span）
             retweeted_status_text = replace_a_to_span(retweeted_status.get('text', None))
+            retweeted_status_text = re.sub("(?<=>)<img.+?>", "", retweeted_status_text)
             retweeted_status_text = re.sub("<img.+?>", "[图片]", retweeted_status_text)
             # 图片
             retweeted_status_pics = retweeted_status.get('pics', None)
