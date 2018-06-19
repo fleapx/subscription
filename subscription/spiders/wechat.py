@@ -65,6 +65,7 @@ class WechatSpider(scrapy.Spider):
                       meta={"num": response.meta.get("num", None), "name": response.meta.get("name", None)})
 
     def parse_article_list(self, response):
+        mongo_dao = WechatMongoDao()
         # 是否需要验证码
         input = response.xpath('//*[@id="input"]').extract_first()
         if input is not None:
@@ -103,7 +104,6 @@ class WechatSpider(scrapy.Spider):
             # 只爬取原创文章
             if article_info["app_msg_ext_info"]["copyright_stat"] == 11:
                 # 判断是否爬取过该文章
-                mongo_dao = WechatMongoDao()
                 document = mongo_dao.find_wechat_by_id(item["_id"])
                 if document is None:
                     yield Request(content_url, callback=self.parse_article, headers=self.article_headers, meta={"item": item})
@@ -124,7 +124,6 @@ class WechatSpider(scrapy.Spider):
                     multi_item['wechat_num'] = response.meta.get("num", None)
 
                     if multi_msg["copyright_stat"] == 11:
-                        mongo_dao = WechatMongoDao()
                         multi_document = mongo_dao.find_wechat_by_id(multi_item["_id"])
                         if multi_document is None:
                             yield Request(multi_content_url, callback=self.parse_article, headers=self.article_headers,
