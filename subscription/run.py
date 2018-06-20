@@ -3,6 +3,7 @@ import time
 import threading
 from subscription import MailTool
 import subprocess
+from subscription.Logger import Logger
 
 
 def crawl_weibo():
@@ -10,6 +11,7 @@ def crawl_weibo():
 
 
 def crawl_wechat():
+    Logger("log.log").info("开始爬取微信公众号")
     subprocess.call(['scrapy', 'crawl', 'wechat'], shell=False, stdout=subprocess.PIPE)
 
 
