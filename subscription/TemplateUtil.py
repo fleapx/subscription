@@ -49,7 +49,7 @@ def get_weibo_template(data):
                 pic_url = pics[0].get('large', None).get('url', None)
 
             lis = '<a href="%s"><img src="%s" style="position: relative!important;display: block;' \
-                  'width: 90%%!important;height: 90%%!important;margin:5px"></a>' % (pic_url, pic_url)
+                  'width: 90%%!important;max-height: 100%%!important;margin:5px"></a>' % (pic_url, pic_url)
 
         # 转发微博
         retweeted_status = post.get('mblog', None).get('retweeted_status', None)
@@ -99,7 +99,7 @@ def get_weibo_template(data):
                     pic_url = retweeted_status_pics[0].get('large', None).get('url', None)
                 retweeted_status_lis = '<a href="%s"><img src="%s" ' \
                                        'style="position: relative!important;display: block;width: 90%%' \
-                                       '!important;height: 100%%!important;margin:5px"></a>' \
+                                       '!important;max-height: 100%%!important;margin:5px"></a>' \
                                        % (pic_url, pic_url)
 
             # 拼接后的完整被转发的微博
