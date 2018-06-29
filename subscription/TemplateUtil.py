@@ -35,10 +35,11 @@ def get_weibo_template(data):
                 else:
                     pic_url = pic.get('large', None).get('url', None)
 
-                li = '<li style="float: left;width: 30%;margin: 5px;height: 0;padding-bottom: 30%;position: relative;border: ' \
-                     '1px solid red;overflow:hidden;"><a style="width: 100%!important;height: 100%!important;' \
-                     'background-image: url(%s);background-repeat: no-repeat;background-position-x: 50%; ' \
-                     'background-position-y:center;position: absolute;background-size: cover;display: block;" href="%s"></a></li>' \
+                li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;padding-bottom: 30%%;' \
+                     'position: relative;overflow:hidden;">' \
+                     '<a style="width: 100%%!important;height: 100%%!important;background-image: ' \
+                     'url(%s);background-repeat: no-repeat;background-position-x: 50%%; background-position-y:center;' \
+                     'position: absolute;background-size: cover;display: block;" href="%s"></a></li>' \
                      % (pic_url, pic_url)
                 lis = lis + li
             lis = lis + '</ul>'
@@ -86,10 +87,13 @@ def get_weibo_template(data):
                     else:
                         pic_url = retweeted_status_pic.get('large', None).get('url', None)
 
-                    retweeted_status_li = '<li style="float: left;width: 30%;margin: 5px;height: 0;padding-bottom: 30%;position: relative;border: ' \
-                     '1px solid red;overflow:hidden;"><a style="width: 100%!important;height: 100%!important;' \
-                     'background-image: url(%s);background-repeat: no-repeat;background-position-x: 50%; ' \
-                     'background-position-y:center;position: absolute;background-size: cover;display: block;" href="%s"></a></li>' % (pic_url, pic_url)
+                    retweeted_status_li = '<li style="float: left;width: 30%%;margin: 5px;height: 0;' \
+                                          'padding-bottom: 30%%;position: relative;overflow:hidden;">' \
+                                          '<a style="width: 100%%!important;height: 100%%!important;' \
+                                          'background-image:url(%s);background-repeat: no-repeat;' \
+                                          'background-position-x: 50%%; background-position-y:center;position: ' \
+                                          'absolute;background-size: cover;display: block;" href="%s"></a></li>' \
+                                          % (pic_url, pic_url)
                     retweeted_status_lis = retweeted_status_lis + retweeted_status_li
                 retweeted_status_lis = retweeted_status_lis + '</ul>'
             # 只有一张图片
