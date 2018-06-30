@@ -25,6 +25,15 @@ def get_weibo_template(data):
         text = re.sub("<img.+?>", "[图片]", text)
         # 图片
         pics = post.get('mblog', None).get('pics', None)
+        # 视频
+        try:
+            page_info = post["mblog"]["page_info"]
+            page_pic = page_info['page_pic']["url"]
+            stream_url = page_info['media_info']["stream_url"]
+        except Exception:
+            page_pic = None
+            stream_url = None
+
         lis = ''
         # 存在多张图片
         if (pics is not None) and (len(pics) > 1):
@@ -52,6 +61,9 @@ def get_weibo_template(data):
 
             lis = '<a href="%s"><img src="%s" style="position: relative!important;display: block;' \
                   'width: 90%%!important;max-height: 100%%!important;margin:5px"></a>' % (pic_url, pic_url)
+        elif page_pic is not None and stream_url is not None:
+            lis = '<a href="%s"><img src="%s" style="position: relative!important;display: block;' \
+                  'width: 90%%!important;max-height: 100%%!important;margin:5px"></a>' % (stream_url, page_pic)
 
         # 转发微博
         retweeted_status = post.get('mblog', None).get('retweeted_status', None)
@@ -77,6 +89,14 @@ def get_weibo_template(data):
             retweeted_status_text = re.sub("<img.+?>", "[图片]", retweeted_status_text)
             # 图片
             retweeted_status_pics = retweeted_status.get('pics', None)
+            # 视频
+            try:
+                retweeted_page_info = post["mblog"]["retweeted_status"]["page_info"]
+                retweeted_page_pic = retweeted_page_info['page_pic']["url"]
+                retweeted_stream_url = retweeted_page_info['media_info']["stream_url"]
+            except Exception:
+                retweeted_page_pic = None
+                retweeted_stream_url = None
             retweeted_status_lis = ''
             # 存在多张图片
             if (retweeted_status_pics is not None) and (len(retweeted_status_pics) > 1):
@@ -106,6 +126,10 @@ def get_weibo_template(data):
                                        'style="position: relative!important;display: block;width: 90%%' \
                                        '!important;max-height: 100%%!important;margin:5px"></a>' \
                                        % (pic_url, pic_url)
+            elif retweeted_page_pic is not None and retweeted_stream_url is not None:
+                retweeted_status_lis = '<a href="%s"><img src="%s" style="position: relative!important;display: block;' \
+                      'width: 90%%!important;max-height: 100%%!important;margin:5px"></a>' \
+                      % (retweeted_stream_url, retweeted_page_pic)
 
             # 拼接后的完整被转发的微博
             retweeted_status_html = '<div style="background-color: #efefef;padding: 5px 5px;cursor: pointer;" >' \
