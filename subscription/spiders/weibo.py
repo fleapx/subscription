@@ -64,12 +64,12 @@ class WeiboSpider(scrapy.Spider):
                 mblog['created_at'] = int(time.time())
 
                 # 加载微博原文
-                urls = re.findall("\\.\\.\\.全文$", mblog['text'])
+                urls = re.findall("\.\.\.全文$", mblog['text'])
 
                 retweed_urls = None
                 retweed_status = mblog.get('retweeted_status', None)
                 if retweed_status is not None:
-                    retweed_urls = re.findall("\\.\\.\\.全文$", retweed_status['text'])
+                    retweed_urls = re.findall("\.\.\.全文$", retweed_status['text'])
 
                 if len(urls) is 1:
                     full_text_url = 'https://m.weibo.cn/status/%s' % mblog["id"]
