@@ -21,8 +21,10 @@ def get_weibo_template(data):
         scheme = post.get('scheme', None)
         # 微博原文（将a标签全部替换为span）
         text = replace_a_to_span(post.get('mblog', None).get('text', None))
-        text = re.sub('src="//h5.sinaimg.cn', 'src="https://h5.sinaimg.cn', text)
-        text = re.sub("src='//h5.sinaimg.cn", "src='https://h5.sinaimg.cn", text)
+        text = re.sub(r'\\"', '"', text)
+        text = re.sub(r'\\n', '', text)
+        text = re.sub('"//h5.sinaimg.cn', '"https://h5.sinaimg.cn', text)
+        text = re.sub("'//h5.sinaimg.cn", "'https://h5.sinaimg.cn", text)
         # 图片
         pics = post.get('mblog', None).get('pics', None)
         # 视频
@@ -88,8 +90,10 @@ def get_weibo_template(data):
 
             # 被转发微博正文(将a标签全部替换为span）
             retweeted_status_text = replace_a_to_span(retweeted_status.get('text', None))
-            retweeted_status_text = re.sub('src="//h5.sinaimg.cn', 'src="https://h5.sinaimg.cn', retweeted_status_text)
-            retweeted_status_text = re.sub("src='//h5.sinaimg.cn", "src='https://h5.sinaimg.cn", retweeted_status_text)
+            retweeted_status_text = re.sub(r'\\"', '"', retweeted_status_text)
+            retweeted_status_text = re.sub(r'\\n', '', retweeted_status_text)
+            retweeted_status_text = re.sub('"//h5.sinaimg.cn', '"https://h5.sinaimg.cn', retweeted_status_text)
+            retweeted_status_text = re.sub("'//h5.sinaimg.cn", "'https://h5.sinaimg.cn", retweeted_status_text)
             # 图片
             retweeted_status_pics = retweeted_status.get('pics', None)
             # 视频
