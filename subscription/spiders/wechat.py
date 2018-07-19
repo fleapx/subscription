@@ -103,7 +103,7 @@ class WechatSpider(scrapy.Spider):
 
             # 只爬取原创文章
             copyright = article_info["app_msg_ext_info"].get("copyright_stat", None)
-            if copyright == 11 or copyright == 100:
+            if copyright == 11:
                 # 判断是否爬取过该文章
                 document = mongo_dao.find_wechat_by_id(item["_id"])
                 if document is None:

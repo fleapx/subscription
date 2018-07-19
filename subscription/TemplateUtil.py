@@ -164,7 +164,7 @@ def get_weibo_template(data):
                     '</div>' \
                     '<div style="height: auto;>' \
                     '<a href="" style="color: #929292;text-decoration: none;">' \
-                    '<span style="font-size: 10px;text-align: center;display:block;">%s</span></a>' \
+                    '<span style="font-size: 10px;display:block;">%s</span></a>' \
                     '</div></div><div style="clear: both;"></div></div></td></tr>' \
                     '<tr><td style="width: 100%%"><div style="margin: 5px">' \
                     '<div style="padding: 5px 5px;cursor: pointer;">' \
